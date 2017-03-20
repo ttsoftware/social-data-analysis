@@ -12,9 +12,6 @@ import {
 
 $(function() {
 
-    // require custom files after DOM has loaded
-    // require('./scatter/scatter.js');
-
     var margin = {
             top: 20,
             right: 20,
