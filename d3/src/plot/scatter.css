@@ -1,0 +1,14 @@
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+.dot {
+    fill: red;
+}
+
+.text {
+    fill: black;
+    font-family: monospace;
+}
