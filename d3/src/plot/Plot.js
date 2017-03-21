@@ -27,6 +27,29 @@ export class Plot {
         throw new Error('Not yet implemented');
     }
 
+    /**
+     * Add the axis labels
+     * @param svg
+     * @param xAxisLabel
+     * @param yAxisLabel
+     */
+    axisLabels(svg, xAxisLabel, yAxisLabel) {
+        svg.append("text")
+            .attr("class", "x-label")
+            .attr("text-anchor", "end")
+            .attr("x", this.width / 2)
+            .attr("y", this.height + 40)
+            .text(xAxisLabel);
+
+        svg.append("text")
+            .attr("class", "y-label")
+            .attr("text-anchor", "end")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -(this.height / 2.5))
+            .attr("y", -50)
+            .text(yAxisLabel);
+    }
+
     get height() {
         return this._height;
     }

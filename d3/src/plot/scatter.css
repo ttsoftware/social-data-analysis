@@ -12,3 +12,27 @@
     fill: black;
     font-family: monospace;
 }
+
+.plot {
+    width: 100%;
+    height: 500px;
+}
+
+.svgContainer {
+    width: 75%;
+    float: left;
+}
+
+.legend {
+    width: 25%;
+    float: right;
+}
+
+.legend ul li {
+  list-style: none;
+  font-family: monospace;
+}
+
+.legend .color-rect {
+    padding-right: 5px;
+}

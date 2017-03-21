@@ -1,38 +1,35 @@
 {
-    "name": "social-data-analysis",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "http-server",
-        "babel": "watchify src/main.js -o bundle.js -t [ babelify --presets [ es2015 ] ]"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/ttsoftware/social-data-analysis.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/ttsoftware/social-data-analysis/issues"
-    },
-    "homepage": "https://github.com/ttsoftware/social-data-analysis#readme",
-    "devDependencies": {
-        "babel-cli": "^6.24.0",
-        "babel-core": "^6.24.0",
-        "babel-preset-es2015": "^6.24.0",
-        "babelify": "^7.3.0",
-        "browserify": "^14.1.0",
-        "core-js": "^2.4.1",
-        "d3": "^4.7.1",
-        "grunt-babel": "^6.0.0",
-        "grunt-cli": "^1.2.0",
-        "http-server": "^0.9.0",
-        "jquery": "^3.1.1",
-        "load-grunt-tasks": "^3.5.2",
-        "plotly": "^1.0.6",
-        "requirejs": "^2.3.3",
-        "watchify": "^3.9.0"
-    }
+  "name": "social-data-analysis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server",
+    "babel": "watchify src/main.js -o bundle.js -t [ babelify --presets [ es2015 ] ]"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ttsoftware/social-data-analysis.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ttsoftware/social-data-analysis/issues"
+  },
+  "homepage": "https://github.com/ttsoftware/social-data-analysis#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.1.0",
+    "core-js": "^2.4.1",
+    "d3": "^4.7.1",
+    "http-server": "^0.9.0",
+    "jquery": "^3.1.1",
+    "plotly": "^1.0.6",
+    "requirejs": "^2.3.3",
+    "watchify": "^3.9.0"
+  }
 }
