@@ -20,14 +20,21 @@ export function loadCSV(csvs) {
                 }
                 else {
                     // format the data
-                    resolve(data.map(function(d) {
+                    let dataPoints = data.map(function(d) {
                         return new ScatterPlotDataPoint(
                             +d['PROSTITUTION'],
                             +d['VEHICLE THEFT'],
                             +d['TOTAL'],
                             d['CATEGORIES']
                         );
-                    }));
+                    });
+
+                    // sort by total descending
+                    dataPoints = dataPoints.sort(function (a, b) {
+                        return a.ySignificance - b.ySignificance;
+                    }).reverse();
+
+                    resolve(dataPoints);
                 }
             });
         });

@@ -48,11 +48,29 @@ export class ScatterPlot extends Plot {
             normalizedSignif[i] = (dataPoint.ySignificance / minTotal) * 8;
         });
 
+        // Append the tooltip div
+        var tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "text")
+            .style("opacity", 0);
+
         // Append the plot to the svg
         let dots = svg.selectAll("g.dot")
             .data(this.dataPoints)
             .enter()
-            .append("g");
+            .append("g")
+            .on("mousemove", function(dataPoint, i) {
+                tooltip.style("opacity", 1);
+                tooltip.html(
+                        formatSignif(dataPoint.ySignificance, 4)
+                    )
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 10) + "px")
+                    .style("background-color", colors[i]);
+            })
+            .on("mouseout", function(dataPoint) {
+                tooltip.style("opacity", 0);
+            });
 
         // Add the dots
         dots.append("circle")
@@ -62,6 +80,9 @@ export class ScatterPlot extends Plot {
             .attr("r", function(dataPoint, i) {
                 return normalizedSignif[i];
             })
+            .transition()
+            .ease(d3.easeElastic)
+            .duration(2000)
             .attr("cx", function(dataPoint) {
                 return instance.xAxis(dataPoint.x);
             })
@@ -72,6 +93,7 @@ export class ScatterPlot extends Plot {
         let formatSignif = d3.format(".0f");
 
         // Add the labels at (x, y)
+        /*
         dots.append("text")
             .attr("class", "text")
             .attr("x", function(dataPoint) {
@@ -89,6 +111,7 @@ export class ScatterPlot extends Plot {
             .text(function(dataPoint) {
                 return formatSignif(dataPoint.ySignificance, 4);
             });
+        */
 
         // Add the X Axis
         svg.append("g")
