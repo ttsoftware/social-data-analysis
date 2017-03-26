@@ -13,9 +13,11 @@ export class Plot {
         this._height = height;
         this._width = width;
 
-        // The axis ranges
-        this.xAxis = xAxis.range([0, width]);
-        this.yAxis = yAxis.range([height, 0]);
+        if (xAxis && yAxis) {
+            // The axis ranges
+            this.xAxis = xAxis.range([0, width]);
+            this.yAxis = yAxis.range([height, 0]);
+        }
     }
 
     /**

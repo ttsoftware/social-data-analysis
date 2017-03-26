@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>D3 Page Template</title>
+      <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+<style type="text/css">
+</style>
+ </head>
+  <body>
+      <script type="text/javascript">
+
+
+
+            d3.json("/prostitutiondata.json", function(pdata) {
+
+
+
+    //Width and height
+                var width = 950;
+                var height = 800;
+                var geofile = "./sfpddistricts.geojson";
+                var colors = ['red', 'yellow'];
+
+                //Define default path generator
+                var projection = d3.geo.mercator()
+                           .center([-122.433701, 37.767683])
+                           .translate([width/2, height/2])
+                           .scale([250000]);
+
+                var path = d3.geo.path()
+                .projection(projection);
+                    
+                //Create SVG element
+                var svg = d3.select("body")
+                                .append("svg")
+                                .attr("width", width)
+                                .attr("height", height);
+                //Load in GeoJSON data
+                d3.json(geofile, function(json) {
+                    console.log(json);
+                    //Bind data and create one path per GeoJSON feature
+                    svg.selectAll("path")
+                       .data(json.features)
+                       .enter()
+                       .append("path")
+                       .attr("d", path)
+                       .style("fill", "steelblue");
+
+                    svg.selectAll("circle")
+                        .data(pdata)
+                        .enter()
+                        .append("circle")
+                        .attr("cx", function(d) {
+                            return projection([d.LON, d.LAT])[0];
+                        })
+                        .attr("cy", function(d) {
+                            return projection([d.LON, d.LAT])[1];
+                        })
+                        .attr("r", 3)
+                        .style("fill", function(d, i) {
+                            return colors[d.CLUSTER2];
+                        });
+
+                    var prostitutiondata = [{
+                        LON: 0,
+                        LAT: 0,
+                        CLUSTER: 1
+                    }]
+
+                    d3.json("./k2.json", function(k2){
+                        console.log(k2);
+
+                        for (var i in k2) {
+
+                            var data = k2[i];
+
+                            svg.append("circle")
+                                .attr("cx", function(d) {
+                                    return projection([data.LON, data.LAT])[0];
+                                })
+                                .attr("cy", function(d) {
+                                    return projection([data.LON, data.LAT])[1];
+                                })
+                                .attr("r", 10)
+                                .style("fill", function(d) {
+                                    return colors[i];
+                                })
+                                .attr("stroke", "black")
+                                .attr("stroke-width", 3);
+                        }
+                    });
+                });
+
+
+
+            });
+        </script>
+    </body>
+</html>
