@@ -1,6 +1,7 @@
 require('core-js');
-let plotly = require('plotly');
 let $ = require('jquery');
+
+require('./clusterErrors.js');
 
 let loadJSON = require('./loadJSON.js');
 let loadCSV = require('./loadCSV.js');
