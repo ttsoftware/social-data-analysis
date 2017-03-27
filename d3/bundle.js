@@ -40911,7 +40911,7 @@ var Geoplot = exports.Geoplot = function (_Plot) {
             var path = d3.geoPath().projection(projection);
 
             // draw map
-            svg.selectAll("path").data(this.mapData.features).enter().append("path").attr("d", path).style("fill", "steelblue");
+            svg.selectAll("path").data(this.mapData.features).enter().append("path").attr("d", path).style("fill", "grey");
 
             // draw all data points
             svg.selectAll("circle").data(this.dataPoints).enter().append("circle").attr("cx", function (d) {

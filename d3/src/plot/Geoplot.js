@@ -52,7 +52,7 @@ export class Geoplot extends Plot {
             .enter()
             .append("path")
             .attr("d", path)
-            .style("fill", "steelblue");
+            .style("fill", "grey");
 
         // draw all data points
         svg.selectAll("circle")
