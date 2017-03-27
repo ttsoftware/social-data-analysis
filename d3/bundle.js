@@ -40776,10 +40776,10 @@ $(function () {
             // switch the plot
             switch (+$(this).val()) {
                 case 2003:
-                    plotCSV(svg, xAxis, yAxis, height, width, colors, data2003);
+                    plotCSV(svg, xAxis, yAxis, height, width, colors, categories, data2003);
                     break;
                 case 2015:
-                    plotCSV(svg, xAxis, yAxis, height, width, colors, data2015);
+                    plotCSV(svg, xAxis, yAxis, height, width, colors, categories, data2015);
                     break;
             }
         });
@@ -40806,19 +40806,17 @@ function plotJSON(prostitutionFile, geoFile, clusterFile) {
         var geodata = values[1];
         var k2 = values[2];
 
-        console.log(k2);
-
         var geoPlot = new _Geoplot.Geoplot(height, width, geodata, pdata, k2);
 
         geoPlot.plot(svg, colors);
     });
 }
 
-function plotCSV(svg, xAxis, yAxis, height, width, colors, dataPoints) {
+function plotCSV(svg, xAxis, yAxis, height, width, colors, categories, dataPoints) {
 
     var scatterPlot = new _ScatterPlot.ScatterPlot(height, width, xAxis, yAxis, dataPoints);
     scatterPlot.axisLabels(svg, "Prostitution", "Vehicle Theft");
-    scatterPlot.plot(svg, colors);
+    scatterPlot.plot(svg, categories, colors);
 }
 
 function legend(colors, categories) {
@@ -40928,9 +40926,9 @@ var Geoplot = exports.Geoplot = function (_Plot) {
             this.clusterCenters.forEach(function (clusterCenter, i) {
 
                 svg.append("circle").attr("cx", function (d) {
-                    return projection([clusterCenter[0], clusterCenter[1]])[0];
+                    return projection([clusterCenter.LON, clusterCenter.LAT])[0];
                 }).attr("cy", function (d) {
-                    return projection([clusterCenter[0], clusterCenter[1]])[1];
+                    return projection([clusterCenter.LON, clusterCenter.LAT])[1];
                 }).attr("r", 10).style("fill", function (d) {
                     return colors[i];
                 }).attr("stroke", "black").attr("stroke-width", 3);
@@ -41097,7 +41095,7 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
 
     _createClass(ScatterPlot, [{
         key: 'plot',
-        value: function plot(svg, colors) {
+        value: function plot(svg, categories, colors) {
 
             // avoid scoping issues
             var instance = this;
@@ -41144,25 +41142,17 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
             var formatSignif = d3.format(".0f");
 
             // Add the labels at (x, y)
-            /*
-            dots.append("text")
-                .attr("class", "text")
-                .attr("x", function(dataPoint) {
-                    return instance.xAxis(dataPoint.x);
-                })
-                .attr("y", function(dataPoint) {
-                    return instance.yAxis(dataPoint.y);
-                })
-                .attr("dx", function(dataPoint, i) {
-                    return normalizedSignif[i] * 0.1 + 'em';
-                })
-                .attr("dy", function(dataPoint) {
-                    return ".3em";
-                })
-                .text(function(dataPoint) {
-                    return formatSignif(dataPoint.ySignificance, 4);
-                });
-            */
+            dots.append("text").attr("class", "text").attr("x", function (dataPoint) {
+                return instance.xAxis(dataPoint.x);
+            }).attr("y", function (dataPoint) {
+                return instance.yAxis(dataPoint.y);
+            }).attr("dx", function (dataPoint, i) {
+                return normalizedSignif[i] * 0.1 + 'em';
+            }).attr("dy", function (dataPoint) {
+                return ".3em";
+            }).text(function (dataPoint, i) {
+                return categories[i];
+            });
 
             // Add the X Axis
             svg.append("g").attr("transform", "translate(0," + this.height + ")").call(d3.axisBottom(this.xAxis));

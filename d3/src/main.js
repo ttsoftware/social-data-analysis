@@ -106,10 +106,10 @@ $(function() {
             // switch the plot
             switch (+$(this).val()) {
                 case 2003:
-                    plotCSV(svg, xAxis, yAxis, height, width, colors, data2003);
+                    plotCSV(svg, xAxis, yAxis, height, width, colors, categories, data2003);
                     break;
                 case 2015:
-                    plotCSV(svg, xAxis, yAxis, height, width, colors, data2015);
+                    plotCSV(svg, xAxis, yAxis, height, width, colors, categories, data2015);
                     break;
             }
         });
@@ -143,15 +143,13 @@ function plotJSON(prostitutionFile, geoFile, clusterFile) {
         let geodata = values[1];
         let k2 = values[2];
 
-        console.log(k2);
-
         let geoPlot = new Geoplot(height, width, geodata, pdata, k2);
 
         geoPlot.plot(svg, colors);
     });
 }
 
-function plotCSV(svg, xAxis, yAxis, height, width, colors, dataPoints) {
+function plotCSV(svg, xAxis, yAxis, height, width, colors, categories, dataPoints) {
 
     let scatterPlot = new ScatterPlot(
         height,
@@ -161,7 +159,7 @@ function plotCSV(svg, xAxis, yAxis, height, width, colors, dataPoints) {
         dataPoints
     );
     scatterPlot.axisLabels(svg, "Prostitution", "Vehicle Theft");
-    scatterPlot.plot(svg, colors);
+    scatterPlot.plot(svg, categories, colors);
 }
 
 function legend(colors, categories) {

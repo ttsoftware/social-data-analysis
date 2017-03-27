@@ -24,7 +24,7 @@ export class ScatterPlot extends Plot {
      * @param svg - the DOM svg element
      * @param colors - optional color input
      */
-    plot(svg, colors) {
+    plot(svg, categories, colors) {
 
         // avoid scoping issues
         let instance = this;
@@ -93,7 +93,6 @@ export class ScatterPlot extends Plot {
         let formatSignif = d3.format(".0f");
 
         // Add the labels at (x, y)
-        /*
         dots.append("text")
             .attr("class", "text")
             .attr("x", function(dataPoint) {
@@ -108,10 +107,9 @@ export class ScatterPlot extends Plot {
             .attr("dy", function(dataPoint) {
                 return ".3em";
             })
-            .text(function(dataPoint) {
-                return formatSignif(dataPoint.ySignificance, 4);
+            .text(function(dataPoint, i) {
+                return categories[i];
             });
-        */
 
         // Add the X Axis
         svg.append("g")
