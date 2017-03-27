@@ -40925,8 +40925,6 @@ var Geoplot = exports.Geoplot = function (_Plot) {
             // draw clust centers
             this.clusterCenters.forEach(function (clusterCenter, i) {
 
-                console.log(clusterCenter);
-
                 svg.append("circle").attr("cx", function (d) {
                     return projection([clusterCenter['LON'], clusterCenter['LAT']])[0];
                 }).attr("cy", function (d) {
@@ -41125,7 +41123,7 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
             // Append the plot to the svg
             var dots = svg.selectAll("g.dot").data(this.dataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
                 tooltip.style("opacity", 1);
-                tooltip.html(formatSignif(dataPoint.ySignificance, 4)).style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[i]);
+                tooltip.html(categories[i] + ': ' + formatSignif(dataPoint.ySignificance, 4)).style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[i]);
             }).on("mouseout", function (dataPoint) {
                 tooltip.style("opacity", 0);
             });

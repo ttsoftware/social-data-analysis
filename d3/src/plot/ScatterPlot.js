@@ -62,6 +62,7 @@ export class ScatterPlot extends Plot {
             .on("mousemove", function(dataPoint, i) {
                 tooltip.style("opacity", 1);
                 tooltip.html(
+                        categories[i] + ': ' +
                         formatSignif(dataPoint.ySignificance, 4)
                     )
                     .style("left", (d3.event.pageX) + "px")

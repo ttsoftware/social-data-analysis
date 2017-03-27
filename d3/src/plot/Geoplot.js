@@ -73,8 +73,6 @@ export class Geoplot extends Plot {
         // draw clust centers
         this.clusterCenters.forEach(function (clusterCenter, i) {
 
-            console.log(clusterCenter);
-
             svg.append("circle")
                 .attr("cx", function(d) {
                     return projection([clusterCenter['LON'], clusterCenter['LAT']])[0];
