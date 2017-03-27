@@ -33313,11 +33313,13 @@ var loadCSV = require('./loadCSV.js');
 
 $(function () {
 
+    var colors = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
+
     $('#clusterSelect').on('change', function () {
 
         $('.svgContainerGeo').html('');
 
-        plotJSON('./src/data_fest/prostitutiondata_' + $(this).val() + '.json', './src/data_fest/sfpddistricts.geojson', './src/data_fest/' + $(this).val() + '.json');
+        plotJSON('./src/data_fest/prostitutiondata_' + $(this).val() + '.json', './src/data_fest/sfpddistricts.geojson', './src/data_fest/' + $(this).val() + '.json', colors);
     });
 
     $('#clusterSelect').trigger('change');
@@ -33340,9 +33342,11 @@ $(function () {
         var data2015 = values[1];
 
         // generate a color for each dataPoint
-        var colors = new Array(10).fill(0).map(function (e) {
-            return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
-        });
+        // let colors = new Array(10)
+        //     .fill(0)
+        //     .map(function(e) {
+        //         return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+        //     });
 
         // generate a list of categories
         var categories = new Array(10).fill(0).map(function (e, i) {
@@ -33393,13 +33397,12 @@ $(function () {
     });
 });
 
-function plotJSON(prostitutionFile, geoFile, clusterFile) {
+function plotJSON(prostitutionFile, geoFile, clusterFile, colors) {
 
     var promises = loadJSON.loadJSON([prostitutionFile, geoFile, clusterFile]);
 
     var width = 950;
     var height = 800;
-    var colors = ['red', 'yellow', 'blue', 'green', 'magenta'];
 
     //Create SVG element
     var svg = d3.select(".svgContainerGeo").append("svg").attr("width", width).attr("height", height);

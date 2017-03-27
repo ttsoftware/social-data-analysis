@@ -19,6 +19,8 @@ import {
 
 $(function() {
 
+    let colors = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
+
     $('#clusterSelect').on('change', function() {
 
         $('.svgContainerGeo').html('');
@@ -26,7 +28,8 @@ $(function() {
         plotJSON(
             './src/data_fest/prostitutiondata_' + $(this).val() + '.json',
             './src/data_fest/sfpddistricts.geojson',
-            './src/data_fest/' + $(this).val() + '.json'
+            './src/data_fest/' + $(this).val() + '.json',
+            colors
         );
     });
 
@@ -50,11 +53,11 @@ $(function() {
         let data2015 = values[1];
 
         // generate a color for each dataPoint
-        let colors = new Array(10)
-            .fill(0)
-            .map(function(e) {
-                return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
-            });
+        // let colors = new Array(10)
+        //     .fill(0)
+        //     .map(function(e) {
+        //         return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+        //     });
 
         // generate a list of categories
         let categories = new Array(10)
@@ -120,7 +123,7 @@ $(function() {
     });
 });
 
-function plotJSON(prostitutionFile, geoFile, clusterFile) {
+function plotJSON(prostitutionFile, geoFile, clusterFile, colors) {
 
     let promises = loadJSON.loadJSON([
         prostitutionFile,
@@ -130,7 +133,6 @@ function plotJSON(prostitutionFile, geoFile, clusterFile) {
 
     let width = 950;
     let height = 800;
-    let colors = ['red', 'yellow', 'blue', 'green', 'magenta'];
 
     //Create SVG element
     let svg = d3.select(".svgContainerGeo")

@@ -12,29 +12,122 @@
 
 <body>
 
-    <div class="plot">
-        <div class="svgContainerScatter"></div>
-        <div class="legend"></div>
+    <div>
+        <h1>Assignment 2</h1>
+
+        <div>
+            <p>
+                Hi! Welcome to our website containing assignment 2, which, firstly, explores the development of prostitution and vehicle theft incidents in 2003 and 2015 and, secondly, presents a cluster analysis and geodata visualization of prostitution incidents in
+                the period of 2003-2016. The site is structured as follows: First we present assignment 2A, visualizing crime data from 2003 and 2015. Then we move on to assignment 2b, exploring the geographical distribution of prostitution incidents
+                in San Francisco.
+            </p>
+
+            <h2>Assignment 2A: One scatterplot and two datasets</h2>
+
+            <p>
+                Figure 1 shows the distribution of total crime, vehicle crime, and prostitution across the ten police departments in San Francisco. The graph is designed as follows:
+
+            </p>
+            <ul>
+                <li>
+                    The color of the points corresponds to the police departments in San Francisco.
+                </li>
+                <li>
+                    The size of the points/nodes is calculated on the total number across all types of crimes in the district. That is, the more crime overall committed in the district, the larger the size of the point.
+                </li>
+                <li>
+                    The x-axis corresponds to the total number of ‘prostitution’ incidents in the districts.
+                </li>
+                <li>
+                    The y-axis corresponds to the total number of ‘vehicle theft’ incidents in the districts.
+                </li>
+            </ul>
+        </div>
+
+        <div class="plot">
+            <div class="caption">Figure 1</div>
+            <div class="svgContainerScatter"></div>
+            <div class="legend"></div>
+        </div>
+        <select id="yearSelect">
+          <option selected="selected" value="2003">2003</option>
+          <option value="2015">2015</option>
+        </select>
+
+        <div>
+            <p>
+                If you are interested in knowing the exact amount of total crime in each police department, hover your mouse over each point. Also, if you want to see the development from 2003 to 2015, click on the button. Note: We have chosen not to assign a label (e.g.
+                a district) directly to the nodes as Murray (2013:107) illustrates in his case of scatterplots. This is done to because we seek to make the visualization as clear as possible by minimizing label overlaps. That said, the datapoints have
+                been labeled with the colors.
+            </p>
+
+            <p>
+                We are working with fixated axes in order to make a comparison between the two years, 2003 and 2015. The figure allows the viewer to visually explore the change in the number of prostitution and vehicle theft incidents for each police district in the
+                years 2003 and 2015. As the size of each data point varies with the total number of crimes in the given district, the figure also shows how large a part of the total crime the prostitution and vehicle theft incidents account for. Small
+                dots at the top and far right part of the figure will have relatively high amounts of prostitution and vehicle crime incidents, relatively to the total number of crime in the area, and vice versa.
+            </p>
+
+            <p>
+                In the scatterplots, the following trend can be identified: There has been a drop in incidents of vehicle theft and prostitution if we compare 2003 with 2015. Across the ten police districts, The case of CENTRAL police department illustrates this point.
+                In 2003, CENTRAL had over 700 incidents of prostitution and around 200 incidents of vehicle theft. In 2015, this picture has changed as CENTRAL now has only 25 incidents of prostitution and below 200 incidents of crime. Parallel to this
+                development, there has not been an overall drop in the total amount of crime across the ten police departments (despite small variations). This suggests that the total amount of crime has not decreased, but specific categories of crime
+                (vehicle theft, prostitution) has decreased while other categories of crime (e.g. assault, burglary) have increased.
+            </p>
+        </div>
     </div>
 
-    <select id="yearSelect">
-      <option selected="selected" value="2003">2003</option>
-      <option value="2015">2015</option>
-    </select>
+    <div>
 
-    <div class="">
+        <div>
+            <h2>Assignment 2B: Visualizing geodata</h2>
+
+            <p>
+              Below, we have created a series of maps of the San Francisco Police Departments. Each data point corresponds to an incident of prostitution crime. By doing this, we are interested in knowing if there exist any geographical trends as to where
+              these incidents tend to occur. In order to pursue this interest, we deploy the method of K-means clustering, an unsupervised learning technique that helps to identify structures and patterns in the data using only the inputs with no additional
+              information (Grus 2015:225). This helps us to organize the prostitution incidents into geographical communities. Choosing the right amount of clusters is no straight task. This is why we have included several maps, from one map with K = 2,
+              to one with K = 6. It is possible to toggle between these by clicking on the buttons below the maps.
+            </p>
+        </div>
+
+        <div class="caption">Figure 2</div>
         <div class="svgContainerGeo"></div>
+
+        Clusters:
+        <select id="clusterSelect">
+              <option selected="selected" value="k2">2</option>
+              <option value="k3">3</option>
+              <option value="k4">4</option>
+              <option value="k5">5</option>
+              <option value="k6">6</option>
+            </select>
+
+        <div>
+            <p>
+                To compute the cluster centers, we’ve used Scikit Learn’s clustering algorithm, which is based on Lloyd’s algorithm. By giving the algorithm a number of clusters, initial k-means are chosen within the data domain. Each observation, in this case prostitution
+                incidents, is assigned to the k-mean closest to where the incident took place, minimizing within-cluster sum of squares. In other words, the total numerical distance from each point to a cluster mean is minimized. In the next step, the
+                algorithm moves the k-mean to the center of each cluster-space. Each data point is now reassigned to the k-mean, which is closest. These steps are repeated until no point is re-assigned.
+            </p>
+        </div>
     </div>
 
-    Clusters:
-    <select id="clusterSelect">
-      <option selected="selected" value="k2">2</option>
-      <option value="k3">3</option>
-      <option value="k4">4</option>
-      <option value="k5">5</option>
-      <option value="k6">6</option>
-    </select>
+    <div>
 
+      <h2>Assignment 2B: Extras</h2>
+      <p>
+        When selecting the number of k-means in a cluster model, the fit gets better for each extra cluster added. You could add as many clusters (k) as you have observations 👎. However, the purpose of the cluster model is to look for values in a vector the observations are centered or “clustered” around, and thus to simplify data and look for trends. In the case of prostitution in San Francisco, we look for certain areas where prostitution is clustered.
+      </p>
+
+      <p>
+        A simply way to choose the right amount of clusters, is by looking for where the line “bends” in figure 3. In this case, the line bends sharply at k = 3.  When toggling between the maps in figure 2, and the map where k = 3 is shown, it is clear that we see two distinct cluster, the big red dot and the big blue dot. The last cluster, shown by the orange dot, is assigned to prostitution incidents spread over a large area. In other words, there is a k for each distinct cluster, and a k for the rest of the incidents, spread over a large area.
+      </p>
+
+      <p>
+        If we keep adding k’s e.g. k = 4, …, k = n, the total squared error is not reduced as much. Thus by choosing 3 clusters, we’ve found the “naturally” occurring clusters.
+      </p>
+
+    </div>
+
+    <div class="caption">Figure 3</div>
     <div id="clusterErrors"></div>
 </body>
 
