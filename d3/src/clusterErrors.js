@@ -79,7 +79,7 @@ $(function() {
         .attr("transform", "rotate(-90)")
         .attr("x", -(height / 2.5))
         .attr("y", -50)
-        .text("Sum of errors");
+        .text("Total squared error");
 
     // Add the valueline path.
     svg.append("path")

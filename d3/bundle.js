@@ -33185,7 +33185,7 @@ $(function () {
 
     svg.append("text").attr("class", "x-label").attr("text-anchor", "end").attr("x", width / 2).attr("y", height + 40).text("Number of clusters");
 
-    svg.append("text").attr("class", "y-label").attr("text-anchor", "end").attr("transform", "rotate(-90)").attr("x", -(height / 2.5)).attr("y", -50).text("Sum of errors");
+    svg.append("text").attr("class", "y-label").attr("text-anchor", "end").attr("transform", "rotate(-90)").attr("x", -(height / 2.5)).attr("y", -50).text("Total squared error");
 
     // Add the valueline path.
     svg.append("path").data([lineData]).attr("class", "line").attr("d", valueline);
