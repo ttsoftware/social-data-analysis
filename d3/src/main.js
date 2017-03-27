@@ -5,19 +5,40 @@ let $ = require('jquery');
 let loadJSON = require('./loadJSON.js');
 
 import * as d3 from 'd3';
-import {Geoplot} from './plot/Geoplot.js';
+import {
+    Geoplot
+} from './plot/Geoplot.js';
 
 $(function() {
 
+    $('#clusterSelect').on('change', function() {
+
+        console.log($(this).val());
+
+        $('.svgContainer').html('');
+
+        plotJSON(
+            './src/data_fest/prostitutiondata_' + $(this).val() + '.json',
+            './src/data_fest/sfpddistricts.geojson'
+        );
+    });
+
+    $('#clusterSelect').trigger('change');
+
+
+});
+
+function plotJSON(prostitutionFile, geoFile, clusterFile) {
+
     let promises = loadJSON.loadJSON([
-        './src/data_fest/prostitutiondata_k2.json',
-        './src/data_fest/sfpddistricts.geojson',
-        //'./src/data_fest/prostitutiondata_k2.json'
+        prostitutionFile,
+        geoFile,
+        clusterFile
     ]);
 
     let width = 950;
     let height = 800;
-    let colors = ['red', 'yellow'];
+    let colors = ['red', 'yellow', 'blue', 'green', 'magenta'];
 
     //Create SVG element
     let svg = d3.select(".svgContainer")
@@ -38,4 +59,4 @@ $(function() {
 
         geoPlot.plot(svg, colors);
     });
-});
+}

@@ -9,14 +9,17 @@ export function loadJSON(jsonFiles) {
     // iterate through json files
     jsonFiles.forEach(function(jsonFile) {
 
-        let jsonPromise = new Promise(function(resolve, reject) {
+        if (jsonFile && jsonFile != '') {
 
-            d3.json(jsonFile, function(jsonData) {
-                resolve(jsonData);
+            let jsonPromise = new Promise(function(resolve, reject) {
+
+                d3.json(jsonFile, function(jsonData) {
+                    resolve(jsonData);
+                });
             });
-        });
 
-        jsonPromises.push(jsonPromise);
+            jsonPromises.push(jsonPromise);
+        }
     });
 
     return jsonPromises;

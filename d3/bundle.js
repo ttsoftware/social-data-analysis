@@ -40617,14 +40617,17 @@ function loadJSON(jsonFiles) {
     // iterate through json files
     jsonFiles.forEach(function (jsonFile) {
 
-        var jsonPromise = new Promise(function (resolve, reject) {
+        if (jsonFile && jsonFile != '') {
 
-            d3.json(jsonFile, function (jsonData) {
-                resolve(jsonData);
+            var jsonPromise = new Promise(function (resolve, reject) {
+
+                d3.json(jsonFile, function (jsonData) {
+                    resolve(jsonData);
+                });
             });
-        });
 
-        jsonPromises.push(jsonPromise);
+            jsonPromises.push(jsonPromise);
+        }
     });
 
     return jsonPromises;
@@ -40649,11 +40652,25 @@ var loadJSON = require('./loadJSON.js');
 
 $(function () {
 
-    var promises = loadJSON.loadJSON(['./src/data_fest/prostitutiondata_k2.json', './src/data_fest/sfpddistricts.geojson']);
+    $('#clusterSelect').on('change', function () {
+
+        console.log($(this).val());
+
+        $('.svgContainer').html('');
+
+        plotJSON('./src/data_fest/prostitutiondata_' + $(this).val() + '.json', './src/data_fest/sfpddistricts.geojson');
+    });
+
+    $('#clusterSelect').trigger('change');
+});
+
+function plotJSON(prostitutionFile, geoFile, clusterFile) {
+
+    var promises = loadJSON.loadJSON([prostitutionFile, geoFile, clusterFile]);
 
     var width = 950;
     var height = 800;
-    var colors = ['red', 'yellow'];
+    var colors = ['red', 'yellow', 'blue', 'green', 'magenta'];
 
     //Create SVG element
     var svg = d3.select(".svgContainer").append("svg").attr("width", width).attr("height", height);
@@ -40671,7 +40688,7 @@ $(function () {
 
         geoPlot.plot(svg, colors);
     });
-});
+}
 
 },{"./loadJSON.js":347,"./plot/Geoplot.js":349,"core-js":6,"d3":314,"jquery":321,"plotly":322}],349:[function(require,module,exports){
 'use strict';
