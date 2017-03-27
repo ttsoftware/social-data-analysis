@@ -40600,6 +40600,58 @@ function extend() {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.loadCSV = loadCSV;
+
+var _d = require('d3');
+
+var d3 = _interopRequireWildcard(_d);
+
+var _ScatterPlotDataPoint = require('./plot/ScatterPlotDataPoint.js');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+require('core-js');
+
+function loadCSV(csvs) {
+
+    var csvPromises = [];
+
+    // iterate through csv files
+    csvs.forEach(function (csv) {
+
+        var csvPromise = new Promise(function (resolve, reject) {
+
+            d3.csv(csv, function (error, data) {
+                if (error) {
+                    reject(error);
+                } else {
+                    // format the data
+                    var dataPoints = data.map(function (d) {
+                        return new _ScatterPlotDataPoint.ScatterPlotDataPoint(+d['PROSTITUTION'], +d['VEHICLE THEFT'], +d['TOTAL'], d['CATEGORIES']);
+                    });
+
+                    // sort by total descending
+                    dataPoints = dataPoints.sort(function (a, b) {
+                        return a.ySignificance - b.ySignificance;
+                    }).reverse();
+
+                    resolve(dataPoints);
+                }
+            });
+        });
+
+        csvPromises.push(csvPromise);
+    });
+
+    return csvPromises;
+}
+
+},{"./plot/ScatterPlotDataPoint.js":353,"core-js":6,"d3":314}],348:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.loadJSON = loadJSON;
 
 var _d = require('d3');
@@ -40633,7 +40685,7 @@ function loadJSON(jsonFiles) {
     return jsonPromises;
 }
 
-},{"core-js":6,"d3":314}],348:[function(require,module,exports){
+},{"core-js":6,"d3":314}],349:[function(require,module,exports){
 'use strict';
 
 var _d = require('d3');
@@ -40642,6 +40694,10 @@ var d3 = _interopRequireWildcard(_d);
 
 var _Geoplot = require('./plot/Geoplot.js');
 
+var _ScatterPlotDataPoint = require('./plot/ScatterPlotDataPoint.js');
+
+var _ScatterPlot = require('./plot/ScatterPlot.js');
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 require('core-js');
@@ -40649,19 +40705,88 @@ var plotly = require('plotly');
 var $ = require('jquery');
 
 var loadJSON = require('./loadJSON.js');
+var loadCSV = require('./loadCSV.js');
 
 $(function () {
 
     $('#clusterSelect').on('change', function () {
 
-        console.log($(this).val());
+        $('.svgContainerGeo').html('');
 
-        $('.svgContainer').html('');
-
-        plotJSON('./src/data_fest/prostitutiondata_' + $(this).val() + '.json', './src/data_fest/sfpddistricts.geojson');
+        plotJSON('./src/data_fest/prostitutiondata_' + $(this).val() + '.json', './src/data_fest/sfpddistricts.geojson', './src/data_fest/' + $(this).val() + '.json');
     });
 
     $('#clusterSelect').trigger('change');
+
+    var margin = {
+        top: 20,
+        right: 50,
+        bottom: 50,
+        left: 70
+    };
+
+    // define the same axis for both plots
+    var xAxis = d3.scaleLinear();
+    var yAxis = d3.scaleLinear();
+
+    var csvPromises = loadCSV.loadCSV(['crimedata2003.csv', 'crimedata2015.csv']);
+
+    Promise.all(csvPromises).then(function (values) {
+        var data2003 = values[0];
+        var data2015 = values[1];
+
+        // generate a color for each dataPoint
+        var colors = new Array(10).fill(0).map(function (e) {
+            return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+        });
+
+        // generate a list of categories
+        var categories = new Array(10).fill(0).map(function (e, i) {
+            return data2003[i].category;
+        });
+
+        // add the legend
+        legend(colors, categories);
+
+        $('#yearSelect').on('change', function (event) {
+
+            // change the year
+            $('.svgContainerScatter').html('');
+
+            var width = d3.select('.svgContainerScatter').node().getBoundingClientRect().width - margin.left - margin.right;
+            var height = d3.select('.plot').node().getBoundingClientRect().height - margin.top - margin.bottom;
+
+            // get the svg
+            var svg = d3.select(".svgContainerScatter").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            // Scale the range of the data
+            // extent returns the min and the max
+            var extentX = d3.extent(data2003, function (dataPoint) {
+                return dataPoint.x;
+            });
+            var xRange = extentX[1] - extentX[0];
+            var extentY = d3.extent(data2003, function (dataPoint) {
+                return dataPoint.y;
+            });
+            var yRange = extentY[1] - extentY[0];
+
+            xAxis.domain([extentX[0] - xRange * .05, extentX[1] + xRange * .05]);
+            yAxis.domain([0, extentY[1] + yRange * .05]);
+
+            // switch the plot
+            switch (+$(this).val()) {
+                case 2003:
+                    plotCSV(svg, xAxis, yAxis, height, width, colors, data2003);
+                    break;
+                case 2015:
+                    plotCSV(svg, xAxis, yAxis, height, width, colors, data2015);
+                    break;
+            }
+        });
+
+        // select the first element by default
+        $('#yearSelect').trigger('change');
+    });
 });
 
 function plotJSON(prostitutionFile, geoFile, clusterFile) {
@@ -40673,16 +40798,15 @@ function plotJSON(prostitutionFile, geoFile, clusterFile) {
     var colors = ['red', 'yellow', 'blue', 'green', 'magenta'];
 
     //Create SVG element
-    var svg = d3.select(".svgContainer").append("svg").attr("width", width).attr("height", height);
+    var svg = d3.select(".svgContainerGeo").append("svg").attr("width", width).attr("height", height);
 
     Promise.all(promises).then(function (values) {
 
         var pdata = values[0];
         var geodata = values[1];
         var k2 = values[2];
-        k2 = [];
 
-        console.log(values);
+        console.log(k2);
 
         var geoPlot = new _Geoplot.Geoplot(height, width, geodata, pdata, k2);
 
@@ -40690,7 +40814,33 @@ function plotJSON(prostitutionFile, geoFile, clusterFile) {
     });
 }
 
-},{"./loadJSON.js":347,"./plot/Geoplot.js":349,"core-js":6,"d3":314,"jquery":321,"plotly":322}],349:[function(require,module,exports){
+function plotCSV(svg, xAxis, yAxis, height, width, colors, dataPoints) {
+
+    var scatterPlot = new _ScatterPlot.ScatterPlot(height, width, xAxis, yAxis, dataPoints);
+    scatterPlot.axisLabels(svg, "Prostitution", "Vehicle Theft");
+    scatterPlot.plot(svg, colors);
+}
+
+function legend(colors, categories) {
+
+    if (d3.select('.legend ul').node()) {
+        // only add the legend once
+        return;
+    }
+
+    d3.select('.legend').append('ul');
+
+    colors.forEach(function (color, i) {
+
+        var listElement = d3.select('.legend ul').append('li');
+
+        listElement.append("svg").attr("class", "color-rect").attr("width", 15).attr("height", 15).append("rect").attr("height", 15).attr("width", 15).attr("fill", color);
+
+        listElement.append('span').text(categories[i]);
+    });
+}
+
+},{"./loadCSV.js":347,"./loadJSON.js":348,"./plot/Geoplot.js":350,"./plot/ScatterPlot.js":352,"./plot/ScatterPlotDataPoint.js":353,"core-js":6,"d3":314,"jquery":321,"plotly":322}],350:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40775,13 +40925,13 @@ var Geoplot = exports.Geoplot = function (_Plot) {
             });
 
             // draw clust centers
-            this.clusterCenters.forEach(function (kluster, i) {
+            this.clusterCenters.forEach(function (clusterCenter, i) {
 
                 svg.append("circle").attr("cx", function (d) {
-                    return projection([clusterCenter.LON, clusterCenter.LAT])[0];
+                    return projection([clusterCenter[0], clusterCenter[1]])[0];
                 }).attr("cy", function (d) {
-                    return projection([clusterCenter.LON, clusterCenter.LAT])[1];
-                }).attr("r", 10).style("fill", function (d, i) {
+                    return projection([clusterCenter[0], clusterCenter[1]])[1];
+                }).attr("r", 10).style("fill", function (d) {
                     return colors[i];
                 }).attr("stroke", "black").attr("stroke-width", 3);
             });
@@ -40791,7 +40941,7 @@ var Geoplot = exports.Geoplot = function (_Plot) {
     return Geoplot;
 }(_Plot2.Plot);
 
-},{"./Plot.js":350,"core-js":6,"d3":314}],350:[function(require,module,exports){
+},{"./Plot.js":351,"core-js":6,"d3":314}],351:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40895,4 +41045,201 @@ var Plot = exports.Plot = function () {
     return Plot;
 }();
 
-},{"core-js":6,"d3":314}]},{},[348]);
+},{"core-js":6,"d3":314}],352:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ScatterPlot = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _d = require('d3');
+
+var d3 = _interopRequireWildcard(_d);
+
+var _Plot2 = require('./Plot.js');
+
+var _ScatterPlotDataPoint = require('./ScatterPlotDataPoint.js');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+require('core-js');
+
+var ScatterPlot = exports.ScatterPlot = function (_Plot) {
+    _inherits(ScatterPlot, _Plot);
+
+    /**
+     * @param dataPoints - Expects an array of ScatterPlotDataPoint
+     */
+    function ScatterPlot(height, width, xAxis, yAxis, dataPoints) {
+        _classCallCheck(this, ScatterPlot);
+
+        var _this = _possibleConstructorReturn(this, (ScatterPlot.__proto__ || Object.getPrototypeOf(ScatterPlot)).call(this, height, width, xAxis, yAxis));
+
+        _this.dataPoints = dataPoints;
+        return _this;
+    }
+
+    /**
+     * Add the scatterplot
+     * @param svg - the DOM svg element
+     * @param colors - optional color input
+     */
+
+
+    _createClass(ScatterPlot, [{
+        key: 'plot',
+        value: function plot(svg, colors) {
+
+            // avoid scoping issues
+            var instance = this;
+
+            if (!colors) {
+                // generate a color for each dataPoint
+                var _colors = new Array(this.dataPoints.length).fill(0).map(function (e) {
+                    return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+                });
+            }
+
+            // scale signif values
+            var minTotal = d3.min(this.dataPoints, function (dataPoint) {
+                return dataPoint.ySignificance;
+            });
+
+            var normalizedSignif = new Array(this.dataPoints.length).fill(0);
+            this.dataPoints.forEach(function (dataPoint, i) {
+                normalizedSignif[i] = dataPoint.ySignificance / minTotal * 8;
+            });
+
+            // Append the tooltip div
+            var tooltip = d3.select("body").append("div").attr("class", "text").style("opacity", 0);
+
+            // Append the plot to the svg
+            var dots = svg.selectAll("g.dot").data(this.dataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
+                tooltip.style("opacity", 1);
+                tooltip.html(formatSignif(dataPoint.ySignificance, 4)).style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[i]);
+            }).on("mouseout", function (dataPoint) {
+                tooltip.style("opacity", 0);
+            });
+
+            // Add the dots
+            dots.append("circle").attr("fill", function (dataPoint, i) {
+                return colors[i];
+            }).attr("r", function (dataPoint, i) {
+                return normalizedSignif[i];
+            }).transition().ease(d3.easeElastic).duration(2000).attr("cx", function (dataPoint) {
+                return instance.xAxis(dataPoint.x);
+            }).attr("cy", function (dataPoint) {
+                return instance.yAxis(dataPoint.y);
+            });
+
+            var formatSignif = d3.format(".0f");
+
+            // Add the labels at (x, y)
+            /*
+            dots.append("text")
+                .attr("class", "text")
+                .attr("x", function(dataPoint) {
+                    return instance.xAxis(dataPoint.x);
+                })
+                .attr("y", function(dataPoint) {
+                    return instance.yAxis(dataPoint.y);
+                })
+                .attr("dx", function(dataPoint, i) {
+                    return normalizedSignif[i] * 0.1 + 'em';
+                })
+                .attr("dy", function(dataPoint) {
+                    return ".3em";
+                })
+                .text(function(dataPoint) {
+                    return formatSignif(dataPoint.ySignificance, 4);
+                });
+            */
+
+            // Add the X Axis
+            svg.append("g").attr("transform", "translate(0," + this.height + ")").call(d3.axisBottom(this.xAxis));
+
+            // Add the Y Axis
+            svg.append("g").call(d3.axisLeft(this.yAxis));
+        }
+    }]);
+
+    return ScatterPlot;
+}(_Plot2.Plot);
+
+},{"./Plot.js":351,"./ScatterPlotDataPoint.js":353,"core-js":6,"d3":314}],353:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+require('core-js');
+
+var ScatterPlotDataPoint = exports.ScatterPlotDataPoint = function () {
+
+    /**
+     * @param x - the x-coordinate
+     * @param y - the y-coordinate
+     * @param ySignificance - the significance of the y-value
+     * @param category - the category of the data point
+     */
+    function ScatterPlotDataPoint(x, y, ySignificance, category) {
+        _classCallCheck(this, ScatterPlotDataPoint);
+
+        this._x = x;
+        this._y = y;
+        this._ySignificance = ySignificance;
+        this._category = category;
+    }
+
+    _createClass(ScatterPlotDataPoint, [{
+        key: 'x',
+        get: function get() {
+            return this._x;
+        },
+        set: function set(x) {
+            this._x = x;
+        }
+    }, {
+        key: 'y',
+        get: function get() {
+            return this._y;
+        },
+        set: function set(y) {
+            this._y = y;
+        }
+    }, {
+        key: 'ySignificance',
+        get: function get() {
+            return this._ySignificance;
+        },
+        set: function set(ySignificance) {
+            this._ySignificance = ySignificance;
+        }
+    }, {
+        key: 'category',
+        get: function get() {
+            return this._category;
+        },
+        set: function set(category) {
+            this._category = category;
+        }
+    }]);
+
+    return ScatterPlotDataPoint;
+}();
+
+},{"core-js":6}]},{},[349]);
