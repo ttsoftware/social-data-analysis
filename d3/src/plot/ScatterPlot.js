@@ -93,23 +93,23 @@ export class ScatterPlot extends Plot {
         let formatSignif = d3.format(".0f");
 
         // Add the labels at (x, y)
-        dots.append("text")
-            .attr("class", "text")
-            .attr("x", function(dataPoint) {
-                return instance.xAxis(dataPoint.x);
-            })
-            .attr("y", function(dataPoint) {
-                return instance.yAxis(dataPoint.y);
-            })
-            .attr("dx", function(dataPoint, i) {
-                return normalizedSignif[i] * 0.1 + 'em';
-            })
-            .attr("dy", function(dataPoint) {
-                return ".3em";
-            })
-            .text(function(dataPoint, i) {
-                return categories[i];
-            });
+        // dots.append("text")
+        //     .attr("class", "text")
+        //     .attr("x", function(dataPoint) {
+        //         return instance.xAxis(dataPoint.x);
+        //     })
+        //     .attr("y", function(dataPoint) {
+        //         return instance.yAxis(dataPoint.y);
+        //     })
+        //     .attr("dx", function(dataPoint, i) {
+        //         return normalizedSignif[i] * 0.1 + 'em';
+        //     })
+        //     .attr("dy", function(dataPoint) {
+        //         return ".3em";
+        //     })
+        //     .text(function(dataPoint, i) {
+        //         return categories[i];
+        //     });
 
         // Add the X Axis
         svg.append("g")

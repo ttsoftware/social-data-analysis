@@ -40925,10 +40925,12 @@ var Geoplot = exports.Geoplot = function (_Plot) {
             // draw clust centers
             this.clusterCenters.forEach(function (clusterCenter, i) {
 
+                console.log(clusterCenter);
+
                 svg.append("circle").attr("cx", function (d) {
-                    return projection([clusterCenter.LON, clusterCenter.LAT])[0];
+                    return projection([clusterCenter['LON'], clusterCenter['LAT']])[0];
                 }).attr("cy", function (d) {
-                    return projection([clusterCenter.LON, clusterCenter.LAT])[1];
+                    return projection([clusterCenter['LON'], clusterCenter['LAT']])[1];
                 }).attr("r", 10).style("fill", function (d) {
                     return colors[i];
                 }).attr("stroke", "black").attr("stroke-width", 3);
@@ -41142,17 +41144,23 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
             var formatSignif = d3.format(".0f");
 
             // Add the labels at (x, y)
-            dots.append("text").attr("class", "text").attr("x", function (dataPoint) {
-                return instance.xAxis(dataPoint.x);
-            }).attr("y", function (dataPoint) {
-                return instance.yAxis(dataPoint.y);
-            }).attr("dx", function (dataPoint, i) {
-                return normalizedSignif[i] * 0.1 + 'em';
-            }).attr("dy", function (dataPoint) {
-                return ".3em";
-            }).text(function (dataPoint, i) {
-                return categories[i];
-            });
+            // dots.append("text")
+            //     .attr("class", "text")
+            //     .attr("x", function(dataPoint) {
+            //         return instance.xAxis(dataPoint.x);
+            //     })
+            //     .attr("y", function(dataPoint) {
+            //         return instance.yAxis(dataPoint.y);
+            //     })
+            //     .attr("dx", function(dataPoint, i) {
+            //         return normalizedSignif[i] * 0.1 + 'em';
+            //     })
+            //     .attr("dy", function(dataPoint) {
+            //         return ".3em";
+            //     })
+            //     .text(function(dataPoint, i) {
+            //         return categories[i];
+            //     });
 
             // Add the X Axis
             svg.append("g").attr("transform", "translate(0," + this.height + ")").call(d3.axisBottom(this.xAxis));
