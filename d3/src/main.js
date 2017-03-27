@@ -10,9 +10,9 @@ import {Geoplot} from './plot/Geoplot.js';
 $(function() {
 
     let promises = loadJSON.loadJSON([
-        './src/data_fest/prostitutiondata.json',
+        './src/data_fest/prostitutiondata_k2.json',
         './src/data_fest/sfpddistricts.geojson',
-        './src/data_fest/prostitutiondata_k2.json'
+        //'./src/data_fest/prostitutiondata_k2.json'
     ]);
 
     let width = 950;
@@ -30,6 +30,7 @@ $(function() {
         let pdata = values[0];
         let geodata = values[1];
         let k2 = values[2];
+        k2 = [];
 
         console.log(values);
 

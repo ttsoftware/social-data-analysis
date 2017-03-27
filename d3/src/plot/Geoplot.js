@@ -10,12 +10,12 @@ export class Geoplot extends Plot {
     /**
      * @param dataPoints
      */
-    constructor(height, width, mapData, dataPoints, klusters) {
+    constructor(height, width, mapData, dataPoints = [], clusterCenters = []) {
         super(height, width, null, null);
 
         this.mapData = mapData;
         this.dataPoints = dataPoints;
-        this.klusters = klusters;
+        this.clusterCenters = clusterCenters;
     }
 
     /**
@@ -48,7 +48,7 @@ export class Geoplot extends Plot {
 
         // draw map
         svg.selectAll("path")
-            .data(this.mapData)
+            .data(this.mapData.features)
             .enter()
             .append("path")
             .attr("d", path)
@@ -57,36 +57,35 @@ export class Geoplot extends Plot {
         // draw all data points
         svg.selectAll("circle")
             .data(this.dataPoints)
-            .append("circle")
             .enter()
+            .append("circle")
             .attr("cx", function(d) {
                 return projection([d.LON, d.LAT])[0];
             })
             .attr("cy", function(d) {
                 return projection([d.LON, d.LAT])[1];
             })
-            .attr("r", 3)
+            .attr("r", 2)
             .style("fill", function(d, i) {
-                return colors[d.CLUSTER2];
+                return colors[d.CLUSTER];
             });
 
-        for (var i in this.klusters) {
-
-            let data = this.klusters[i];
+        // draw clust centers
+        this.clusterCenters.forEach(function (kluster, i) {
 
             svg.append("circle")
                 .attr("cx", function(d) {
-                    return projection([data.LON, data.LAT])[0];
+                    return projection([clusterCenter.LON, clusterCenter.LAT])[0];
                 })
                 .attr("cy", function(d) {
-                    return projection([data.LON, data.LAT])[1];
+                    return projection([clusterCenter.LON, clusterCenter.LAT])[1];
                 })
                 .attr("r", 10)
-                .style("fill", function(d) {
+                .style("fill", function(d, i) {
                     return colors[i];
                 })
                 .attr("stroke", "black")
                 .attr("stroke-width", 3);
-        }
+        });
     }
 }
