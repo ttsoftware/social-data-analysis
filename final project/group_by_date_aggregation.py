@@ -1,7 +1,9 @@
 # coding=utf-8
 import pandas
 
-traffic_data_set = pandas.read_csv('traffic_data_datetime.csv')
+traffic_data_set = pandas.read_csv('traffic_data.csv')
+traffic_data_set['DATETIME'] = pandas.to_datetime(traffic_data_set['DATE'])
+traffic_data_set.to_csv('traffic_data_datetime.csv')
 
 print traffic_data_set.columns.values
 

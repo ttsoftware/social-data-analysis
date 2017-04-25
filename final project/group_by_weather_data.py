@@ -35,7 +35,7 @@ traffic_data = pandas.merge(
     weather_data_set,
     how='left',
     on=['DATETIME'],
-    sort=True,
+    sort=False,
     copy=True,
     indicator=False
 )
