@@ -1,6 +1,5 @@
 # coding=utf-8
 import pandas
-import matplotlib.pyplot as plt
 
 # PRCP = precipitation
 # SNWD = snow depth data
@@ -11,5 +10,8 @@ import matplotlib.pyplot as plt
 
 traffic_data = pandas.read_csv('traffic_data_datetime_aggregation_weather.csv')
 
-plt.plot(traffic_data['PRCP'], traffic_data['ACCIDENT COUNT'], 'bs')
-plt.show()
+correlation = traffic_data.corr('pearson')
+
+print correlation.columns.values
+print correlation['PRCP']['ACCIDENT COUNT']
+print correlation['PRCP']['NUMBER OF PERSONS INJURED']

@@ -40,4 +40,14 @@ traffic_data = pandas.merge(
     indicator=False
 )
 
+#PRCP	SNWD	SNOW	TAVG	TMAX	TMIN
+
+traffic_data['PRCP'] = pandas.to_numeric(traffic_data['PRCP'])
+traffic_data['SNWD'] = pandas.to_numeric(traffic_data['SNWD'])
+traffic_data['SNOW'] = pandas.to_numeric(traffic_data['SNOW'])
+traffic_data['TAVG'] = pandas.to_numeric(traffic_data['TAVG'])
+traffic_data['TMAX'] = pandas.to_numeric(traffic_data['TMAX'])
+traffic_data['TMIN'] = pandas.to_numeric(traffic_data['TMIN'])
+traffic_data['ACCIDENT COUNT'] = pandas.to_numeric(traffic_data['ACCIDENT COUNT'])
+
 traffic_data.to_csv('traffic_data_datetime_aggregation_weather.csv')
