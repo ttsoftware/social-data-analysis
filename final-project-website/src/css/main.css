@@ -1,0 +1,58 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 50px;
+}
+
+.banner {
+    background: url('../images/skyline.jpg');
+    background-size: cover;
+    height: 200px;
+}
+
+.navigation {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: gray;
+}
+
+.nav-pills>li {
+    background-color: lightgray;
+    border-radius: 0;
+    width: 140px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.nav-pills>li>a {
+    text-decoration: none;
+    border-radius: 0;
+    color: black;
+}
+
+.nav-pills>li>a:hover {
+    background-color: darkgray;
+    border-radius: 0;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    background-color: pink;
+    border-radius: 0;
+}
+
+.content-container {
+    background-color: teal;
+    min-height: 55vh;
+    margin-bottom: 30px;
+    padding: 20px;
+    display: flex
+}
+
+#content-container {
+    background-color: snow;
+    padding: 20px;
+    width: 100%;
+}

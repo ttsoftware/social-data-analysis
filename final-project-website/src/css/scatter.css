@@ -1,0 +1,68 @@
+body {
+    font-family: Helvetica;
+    padding-right: 10%;
+    padding-left: 10%;
+}
+
+g {
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+.dot {
+    fill: red;
+}
+
+.text {
+    font-family: monospace;
+    position: absolute;
+    text-align: center;
+    color: white;
+    padding: 5px;
+    margin-left: 15px;
+    border: 1px solid black;
+}
+
+.plot {
+    width: 100%;
+    height: 500px;
+    padding: 25px;
+    margin-bottom: 75px;
+}
+
+.caption {
+    float: left;
+    margin-left: 40%;
+    font-weight: bold;
+}
+
+.svgContainerScatter {
+    width: 75%;
+    max-width: 75%;
+    float: left;
+}
+
+.legend {
+    width: 25%;
+    max-width: 25%;
+    float: right;
+}
+
+.legend ul {
+    margin: 0;
+    padding: 0;
+}
+
+.legend ul li {
+    list-style: none;
+}
+
+.legend .color-rect {
+    padding-right: 5px;
+}
