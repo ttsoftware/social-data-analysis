@@ -33216,6 +33216,11 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 require('core-js');
 
 function loadCSV(csvs) {
+    var xKey = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var yKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    var ySignificanceKey = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+    var categoryKey = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
+
 
     var csvPromises = [];
 
@@ -33230,7 +33235,7 @@ function loadCSV(csvs) {
                 } else {
                     // format the data
                     var dataPoints = data.map(function (d) {
-                        return new _ScatterPlotDataPoint.ScatterPlotDataPoint(+d['PROSTITUTION'], +d['VEHICLE THEFT'], +d['TOTAL'], d['CATEGORIES']);
+                        return new _ScatterPlotDataPoint.ScatterPlotDataPoint(+d[xKey], +d[yKey], +d[ySignificanceKey], d[categoryKey]);
                     });
 
                     // sort by total descending
@@ -33249,7 +33254,7 @@ function loadCSV(csvs) {
     return csvPromises;
 }
 
-},{"../plot/ScatterPlotDataPoint.js":317,"core-js":1,"d3":308}],312:[function(require,module,exports){
+},{"../plot/ScatterPlotDataPoint.js":319,"core-js":1,"d3":308}],312:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33311,6 +33316,10 @@ require('./lib/clusterErrors.js');
 var loadJSON = require('./lib/loadJSON.js');
 var loadCSV = require('./lib/loadCSV.js');
 
+// Import separate pages
+var descriptivePage = require('./pages/descriptive-statistics.js');
+var geoPage = require('./pages/geoplot.js');
+
 // Declare javascript in separate scope
 $(function () {
 
@@ -33329,6 +33338,10 @@ $(function () {
             // set this nav element as active
             anchor.parent().addClass('active');
             $('#content-container').html(text);
+
+            // init all the pages
+            descriptivePage.initDescriptive();
+            geoPage.initGeoplots();
         });
     });
 
@@ -33336,7 +33349,184 @@ $(function () {
     $('#frontpage').click();
 });
 
-},{"./lib/clusterErrors.js":310,"./lib/loadCSV.js":311,"./lib/loadJSON.js":312,"./plot/Geoplot.js":314,"./plot/ScatterPlot.js":316,"./plot/ScatterPlotDataPoint.js":317,"core-js":1,"d3":308,"jquery":309}],314:[function(require,module,exports){
+},{"./lib/clusterErrors.js":310,"./lib/loadCSV.js":311,"./lib/loadJSON.js":312,"./pages/descriptive-statistics.js":314,"./pages/geoplot.js":315,"./plot/Geoplot.js":316,"./plot/ScatterPlot.js":318,"./plot/ScatterPlotDataPoint.js":319,"core-js":1,"d3":308,"jquery":309}],314:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.initDescriptive = initDescriptive;
+
+var _d = require('d3');
+
+var d3 = _interopRequireWildcard(_d);
+
+var _ScatterPlotDataPoint = require('../plot/ScatterPlotDataPoint.js');
+
+var _ScatterPlot = require('../plot/ScatterPlot.js');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+require('core-js');
+var $ = require('jquery');
+
+require('../lib/clusterErrors.js');
+
+var loadJSON = require('../lib/loadJSON.js');
+var loadCSV = require('../lib/loadCSV.js');
+
+function initDescriptive() {
+
+    var colors = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
+
+    var margin = {
+        top: 20,
+        right: 50,
+        bottom: 50,
+        left: 70
+    };
+
+    // define the same axis for both plots
+    var xAxis = d3.scaleLinear();
+    var yAxis = d3.scaleLinear();
+
+    var csvPromises = loadCSV.loadCSV(['data/trafficdata2013.csv', 'data/trafficdata2014.csv', 'data/trafficdata2015.csv', 'data/trafficdata2016.csv'], 'Injury per 100000 inhabitant', 'Accident per 100000 inhabitant', 'RATIO', 'BOROUGH');
+
+    Promise.all(csvPromises).then(function (values) {
+
+        var yearData = {
+            2013: values[0],
+            2014: values[1],
+            2015: values[2],
+            2016: values[3]
+        };
+
+        var yearsDataPoints = values.reduce(function (previous, current) {
+            return previous.concat(Object.values(current));
+        });
+
+        // generate a list of categories
+        var categories = new Array(5).fill(0).map(function (e, i) {
+            return yearData[2013][i].category;
+        });
+
+        // add the legend
+        legend(colors, categories);
+
+        $('#yearSelect').on('change', function (event) {
+
+            // change the year
+            $('.boroughInjuriesContainer').html('');
+
+            var width = d3.select('.boroughInjuriesContainer').node().getBoundingClientRect().width - margin.left - margin.right;
+            var height = d3.select('.plot').node().getBoundingClientRect().height - margin.top - margin.bottom;
+
+            // get the svg
+            var svg = d3.select(".boroughInjuriesContainer").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            // Scale the range of the data
+            // extent returns the min and the max
+            var extentX = d3.extent(yearsDataPoints, function (dataPoint) {
+                return dataPoint.x;
+            });
+            var xRange = extentX[1] - extentX[0];
+            var extentY = d3.extent(yearsDataPoints, function (dataPoint) {
+                return dataPoint.y;
+            });
+            var yRange = extentY[1] - extentY[0];
+
+            xAxis.domain([extentX[0] - xRange * .05, extentX[1] + xRange * .05]);
+            yAxis.domain([0, extentY[1] + yRange * .05]);
+
+            // switch the plot
+            plotCSV(svg, xAxis, yAxis, height, width, colors, categories, yearData[+$(this).val()]);
+        });
+
+        // select the first element by default
+        $('#yearSelect').trigger('change');
+    });
+}
+
+function plotCSV(svg, xAxis, yAxis, height, width, colors, categories, dataPoints) {
+
+    var scatterPlot = new _ScatterPlot.ScatterPlot(height, width, xAxis, yAxis, dataPoints);
+    scatterPlot.axisLabels(svg, "Injury per 100,000 inhabitants", "Accident per 100,000 inhabitants");
+    scatterPlot.plot(svg, categories, colors);
+}
+
+function legend(colors, categories) {
+
+    if (d3.select('.legend ul').node()) {
+        // only add the legend once
+        return;
+    }
+
+    d3.select('.legend').append('ul');
+
+    categories.forEach(function (category, i) {
+
+        var listElement = d3.select('.legend ul').append('li');
+
+        listElement.append("svg").attr("class", "color-rect").attr("width", 15).attr("height", 15).append("rect").attr("height", 15).attr("width", 15).attr("fill", colors[i]);
+
+        listElement.append('span').text(category);
+    });
+}
+
+},{"../lib/clusterErrors.js":310,"../lib/loadCSV.js":311,"../lib/loadJSON.js":312,"../plot/ScatterPlot.js":318,"../plot/ScatterPlotDataPoint.js":319,"core-js":1,"d3":308,"jquery":309}],315:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.initGeoplots = initGeoplots;
+
+var _d = require('d3');
+
+var d3 = _interopRequireWildcard(_d);
+
+var _Geoplot = require('../plot/Geoplot.js');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+require('core-js');
+var $ = require('jquery');
+
+require('../lib/clusterErrors.js');
+
+var loadJSON = require('../lib/loadJSON.js');
+var loadCSV = require('../lib/loadCSV.js');
+
+function initGeoplots() {
+
+    // let colors = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
+    var colors = ['#F26D21', '#EBC944', '#C02F1D'];
+
+    plotJSON('../data/top_25_samlet.json', '../data/nycboroughboundaries.geojson', colors);
+}
+
+function plotJSON(dataFile, geoFile, colors) {
+
+    var promises = loadJSON.loadJSON([dataFile, geoFile]);
+
+    var width = 950;
+    var height = 800;
+
+    //Create SVG element
+    var svg = d3.select(".svgContainerGeo").append("svg").attr("width", width).attr("height", height);
+
+    Promise.all(promises).then(function (values) {
+
+        var data = values[0];
+        var geodata = values[1];
+
+        var geoPlot = new _Geoplot.Geoplot(height, width, geodata, data);
+
+        geoPlot.plot(svg, colors);
+    });
+}
+
+},{"../lib/clusterErrors.js":310,"../lib/loadCSV.js":311,"../lib/loadJSON.js":312,"../plot/Geoplot.js":316,"core-js":1,"d3":308,"jquery":309}],316:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33370,7 +33560,6 @@ var Geoplot = exports.Geoplot = function (_Plot) {
      */
     function Geoplot(height, width, mapData) {
         var dataPoints = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-        var clusterCenters = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
 
         _classCallCheck(this, Geoplot);
 
@@ -33378,7 +33567,6 @@ var Geoplot = exports.Geoplot = function (_Plot) {
 
         _this.mapData = mapData;
         _this.dataPoints = dataPoints;
-        _this.clusterCenters = clusterCenters;
         return _this;
     }
 
@@ -33386,50 +33574,60 @@ var Geoplot = exports.Geoplot = function (_Plot) {
      * Add the geoplot
      * @param svg - the DOM svg element
      * @param colors - optional color input
+     * @param opacity - optional opacity input
      */
 
 
     _createClass(Geoplot, [{
         key: 'plot',
-        value: function plot(svg, colors) {
+        value: function plot(svg, colors, opacities) {
 
             // avoid scoping issues
             var instance = this;
 
             if (!colors) {
                 // generate a color for each dataPoint
-                var _colors = new Array(this.dataPoints.length).fill(0).map(function (e) {
+                colors = new Array(this.dataPoints.length).fill(0).map(function (e) {
                     return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
                 });
             }
 
+            if (!opacities) {
+                opacities = new Array(colors.length).fill(0).map(function () {
+                    return 0.8;
+                });
+            }
+
             //Define default path generator
-            var projection = d3.geoMercator().center([-122.433701, 37.767683]).translate([this.width / 2, this.height / 2]).scale([250000]);
+            var projection = d3.geoMercator().center([-73.94, 40.70]).translate([this.width / 2, this.height / 2]).scale([70000]);
 
             var path = d3.geoPath().projection(projection);
 
             // draw map
-            svg.selectAll("path").data(this.mapData.features).enter().append("path").attr("d", path).style("fill", "grey");
+            svg.selectAll("path").data(this.mapData.features).enter().append("path").attr("d", path).style("fill", "black");
+
+            // Append the tooltip div
+            var tooltip = d3.select("body").append("div").attr("class", "text").style("opacity", 0);
+
+            // mouseover tooltips
+            var dots = svg.selectAll("g.dot").data(this.dataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
+                tooltip.style("opacity", 1);
+                tooltip.html(dataPoint.INTERSECTION + '<br>' + '<span style="color: black">Accidents</span>: ' + dataPoint.ACCIDENTS + '<br>' + '<span style="color: black">Injuries</span>: ' + dataPoint.INJURIES + '<br>').style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[dataPoint.COLOR]);
+            }).on("mouseout", function (dataPoint) {
+                tooltip.style("opacity", 0);
+            });
 
             // draw all data points
-            svg.selectAll("circle").data(this.dataPoints).enter().append("circle").attr("cx", function (d) {
+            dots.append("circle").attr("cx", function (d) {
                 return projection([d.LON, d.LAT])[0];
             }).attr("cy", function (d) {
                 return projection([d.LON, d.LAT])[1];
-            }).attr("r", 2).style("fill", function (d, i) {
-                return colors[d.CLUSTER];
-            });
-
-            // draw clust centers
-            this.clusterCenters.forEach(function (clusterCenter, i) {
-
-                svg.append("circle").attr("cx", function (d) {
-                    return projection([clusterCenter['LON'], clusterCenter['LAT']])[0];
-                }).attr("cy", function (d) {
-                    return projection([clusterCenter['LON'], clusterCenter['LAT']])[1];
-                }).attr("r", 10).style("fill", function (d) {
-                    return colors[i];
-                }).attr("stroke", "black").attr("stroke-width", 3);
+            }).attr("r", function (d) {
+                return d.ACCIDENTS / 70;
+            }).style("fill", function (d, i) {
+                return colors[d.COLOR];
+            }).style("opacity", function (d) {
+                return opacities[d.COLOR];
             });
         }
     }]);
@@ -33437,7 +33635,7 @@ var Geoplot = exports.Geoplot = function (_Plot) {
     return Geoplot;
 }(_Plot2.Plot);
 
-},{"./Plot.js":315,"core-js":1,"d3":308}],315:[function(require,module,exports){
+},{"./Plot.js":317,"core-js":1,"d3":308}],317:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33541,7 +33739,7 @@ var Plot = exports.Plot = function () {
     return Plot;
 }();
 
-},{"core-js":1,"d3":308}],316:[function(require,module,exports){
+},{"core-js":1,"d3":308}],318:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33605,6 +33803,8 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
                 });
             }
 
+            var formatSignif = d3.format(".0f");
+
             // scale signif values
             var minTotal = d3.min(this.dataPoints, function (dataPoint) {
                 return dataPoint.ySignificance;
@@ -33621,7 +33821,7 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
             // Append the plot to the svg
             var dots = svg.selectAll("g.dot").data(this.dataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
                 tooltip.style("opacity", 1);
-                tooltip.html(categories[i] + ': ' + formatSignif(dataPoint.ySignificance, 4)).style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[i]);
+                tooltip.html(categories[i] + '<br>' + '<span style="color: black">Accidents</span>: ' + formatSignif(dataPoint.y, 4) + '<br>' + '<span style="color: black">Injuries</span>: ' + formatSignif(dataPoint.x, 4) + '<br>' + '<span style="color: black">Ratio</span>: ' + formatSignif(dataPoint.ySignificance * 100, 4) + '%').style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[i]);
             }).on("mouseout", function (dataPoint) {
                 tooltip.style("opacity", 0);
             });
@@ -33636,8 +33836,6 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
             }).attr("cy", function (dataPoint) {
                 return instance.yAxis(dataPoint.y);
             });
-
-            var formatSignif = d3.format(".0f");
 
             // Add the labels at (x, y)
             // dots.append("text")
@@ -33669,7 +33867,7 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
     return ScatterPlot;
 }(_Plot2.Plot);
 
-},{"./Plot.js":315,"./ScatterPlotDataPoint.js":317,"core-js":1,"d3":308}],317:[function(require,module,exports){
+},{"./Plot.js":317,"./ScatterPlotDataPoint.js":319,"core-js":1,"d3":308}],319:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

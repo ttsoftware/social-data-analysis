@@ -152,7 +152,7 @@ params_grid = {
     # 'svm__C': [1, 100, 1000],
     'svm__kernel': ['linear', 'rbf'],
     # 'svm__gamma': [0.001, 0.0001],
-    'pca__n_components': [2, 4, 8],
+    'pca__n_components': [8],
 }
 
 # perform cross-validation
@@ -160,7 +160,7 @@ estimator = GridSearchCV(pipe, params_grid)
 estimator.fit(train_predictors, train_targets)
 
 print estimator.best_params_, estimator.best_score_
-print pca.components_, pca.inverse_transform
+print pca.inverse_transform
 
 print estimator.score(test_predictors, test_targets)
 print estimator.score(validate_predictors, validate_targets)

@@ -38,6 +38,8 @@ export class ScatterPlot extends Plot {
                 });
         }
 
+        let formatSignif = d3.format(".0f");
+
         // scale signif values
         let minTotal = d3.min(this.dataPoints, function(dataPoint) {
             return dataPoint.ySignificance;
@@ -62,8 +64,10 @@ export class ScatterPlot extends Plot {
             .on("mousemove", function(dataPoint, i) {
                 tooltip.style("opacity", 1);
                 tooltip.html(
-                        categories[i] + ': ' +
-                        formatSignif(dataPoint.ySignificance, 4)
+                        categories[i] + '<br>' +
+                        '<span style="color: black">Accidents</span>: ' + formatSignif(dataPoint.y, 4) + '<br>' +
+                        '<span style="color: black">Injuries</span>: ' + formatSignif(dataPoint.x, 4) + '<br>' +
+                        '<span style="color: black">Ratio</span>: ' + formatSignif(dataPoint.ySignificance * 100, 4) + '%'
                     )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 10) + "px")
@@ -90,8 +94,6 @@ export class ScatterPlot extends Plot {
             .attr("cy", function(dataPoint) {
                 return instance.yAxis(dataPoint.y);
             });
-
-        let formatSignif = d3.format(".0f");
 
         // Add the labels at (x, y)
         // dots.append("text")

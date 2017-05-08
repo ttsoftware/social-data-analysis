@@ -5,7 +5,7 @@ import {
     ScatterPlotDataPoint
 } from '../plot/ScatterPlotDataPoint.js';
 
-export function loadCSV(csvs) {
+export function loadCSV(csvs, xKey=null, yKey=null, ySignificanceKey=null, categoryKey=null) {
 
     let csvPromises = [];
 
@@ -22,10 +22,10 @@ export function loadCSV(csvs) {
                     // format the data
                     let dataPoints = data.map(function(d) {
                         return new ScatterPlotDataPoint(
-                            +d['PROSTITUTION'],
-                            +d['VEHICLE THEFT'],
-                            +d['TOTAL'],
-                            d['CATEGORIES']
+                            +d[xKey],
+                            +d[yKey],
+                            +d[ySignificanceKey],
+                            d[categoryKey]
                         );
                     });
 

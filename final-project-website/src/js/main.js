@@ -17,6 +17,10 @@ import {
     ScatterPlot
 } from './plot/ScatterPlot.js';
 
+// Import separate pages
+let descriptivePage = require('./pages/descriptive-statistics.js');
+let geoPage = require('./pages/geoplot.js');
+
 // Declare javascript in separate scope
 $(function() {
 
@@ -35,6 +39,10 @@ $(function() {
             // set this nav element as active
             anchor.parent().addClass('active');
             $('#content-container').html(text);
+
+            // init all the pages
+            descriptivePage.initDescriptive();
+            geoPage.initGeoplots();
         });
     });
 

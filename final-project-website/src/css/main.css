@@ -8,21 +8,22 @@ body {
 }
 
 .banner {
-    background: url('../images/skyline.jpg');
+    background: url('../images/5856357-ny-skyline-wallpapers-and-screensavers.jpg');
     background-size: cover;
+    background-position: bottom;
     height: 200px;
 }
 
 .navigation {
     margin-top: 30px;
     margin-bottom: 30px;
-    background-color: gray;
+    background-color: #111130;
 }
 
 .nav-pills>li {
-    background-color: lightgray;
+    background-color: #111130;
     border-radius: 0;
-    width: 140px;
+    min-width: 180px;
     text-align: center;
     cursor: pointer;
 }
@@ -30,29 +31,69 @@ body {
 .nav-pills>li>a {
     text-decoration: none;
     border-radius: 0;
-    color: black;
+    color: #F0F0F0;
 }
 
 .nav-pills>li>a:hover {
-    background-color: darkgray;
+    background-color: #161515;
+    color: #ECE753;
     border-radius: 0;
 }
 
 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-    background-color: pink;
+    background-color: #ECE753;
+    color: #161515;
     border-radius: 0;
 }
 
 .content-container {
-    background-color: teal;
+    background-color: #111130;
     min-height: 55vh;
     margin-bottom: 30px;
-    padding: 20px;
+    padding: 2px;
     display: flex
 }
 
 #content-container {
-    background-color: snow;
+    background-color: #F0F0F0;
     padding: 20px;
     width: 100%;
+}
+
+.plot {
+    width: 100%;
+    height: 500px;
+    padding: 25px;
+    margin-bottom: 75px;
+}
+
+.caption {
+    float: left;
+    margin-left: 40%;
+    font-weight: bold;
+}
+
+.boroughInjuriesContainer {
+    width: 75%;
+    max-width: 75%;
+    float: left;
+}
+
+.legend {
+    width: 25%;
+    max-width: 25%;
+    float: right;
+}
+
+.legend ul {
+    margin: 0;
+    padding: 0;
+}
+
+.legend ul li {
+    list-style: none;
+}
+
+.legend .color-rect {
+    margin-right: 5px;
 }
