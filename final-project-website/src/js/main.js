@@ -20,9 +20,11 @@ import {
 // Import separate pages
 let descriptivePage = require('./pages/descriptive-statistics.js');
 let geoPage = require('./pages/geoplot.js');
+let regressionPage = require('./pages/regression.js');
 
 // Declare javascript in separate scope
-$(function() {
+
+$(document).ready(() => {
 
     // handle navigation
     $('.nav li a').click((event) => {
@@ -43,9 +45,13 @@ $(function() {
             // init all the pages
             descriptivePage.initDescriptive();
             geoPage.initGeoplots();
+            regressionPage.initRegression();
         });
     });
 
     // initialize front page
     $('#frontpage').click();
+})
+$(function() {
+
 });

@@ -94,7 +94,7 @@ traffic_data['MULTIPLE_VEHICLES'] = traffic_data['VEHICLE TYPE CODE 2'] != 0
 
 # reduce data set to 100000 rows
 print len(traffic_data)
-traffic_data = traffic_data.sample(10000)
+traffic_data = traffic_data.sample(100000)
 
 traffic_test_data = traffic_data[traffic_data['NUMBER OF PERSONS INJURED'] > 0]
 
@@ -135,32 +135,30 @@ test_injuries_targets = test_injuries['HAS_INJURED']
 validate_injuries_predictors = validate_injuries[dummie_columns]
 validate_injuries_targets = validate_injuries['HAS_INJURED']
 
-# classifier = SVC(kernel='rbf')
-# classifier.fit(train_predictors, train_targets)
-# print classifier.score(test_predictors, test_targets)
-# print classifier.score(validate_predictors, validate_targets)
-
-# Use Principal Component Analysis to reduce dimensionality and improve generalization
-pca = decomposition.PCA()
-svm = SVC()
-
-# Combine PCA and SVC to a pipeline
-pipe = Pipeline(steps=[('pca', pca), ('svm', svm)])
-
-# Configure the cross-validation settings
-params_grid = {
-    # 'svm__C': [1, 100, 1000],
-    'svm__kernel': ['linear', 'rbf'],
-    # 'svm__gamma': [0.001, 0.0001],
-    'pca__n_components': [8],
-}
-
-# perform cross-validation
-estimator = GridSearchCV(pipe, params_grid)
+estimator = SVC(kernel='rbf')
 estimator.fit(train_predictors, train_targets)
 
-print estimator.best_params_, estimator.best_score_
-print pca.inverse_transform
+# Use Principal Component Analysis to reduce dimensionality and improve generalization
+# pca = decomposition.PCA()
+# svm = SVC()
+#
+# # Combine PCA and SVC to a pipeline
+# pipe = Pipeline(steps=[('pca', pca), ('svm', svm)])
+#
+# # Configure the cross-validation settings
+# params_grid = {
+#     # 'svm__C': [1, 100, 1000],
+#     'svm__kernel': ['linear', 'rbf'],
+#     # 'svm__gamma': [0.001, 0.0001],
+#     'pca__n_components': [8],
+# }
+#
+# # perform cross-validation
+# estimator = GridSearchCV(pipe, params_grid)
+# estimator.fit(train_predictors, train_targets)
+#
+# print estimator.best_params_, estimator.best_score_
+# print pca.inverse_transform
 
 print estimator.score(test_predictors, test_targets)
 print estimator.score(validate_predictors, validate_targets)
@@ -169,7 +167,7 @@ print estimator.score(test_injuries_predictors, test_injuries_targets)
 print estimator.score(validate_injuries_predictors, validate_injuries_targets)
 
 # store model for further usage
-with open('svm_classifier_10000_cross_validation.pkl', 'wb') as fid:
+with open('svm_classifier_100000_cross_validation.pkl', 'wb') as fid:
     cPickle.dump(estimator, fid)
 
 # load it again

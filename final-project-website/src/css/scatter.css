@@ -1,7 +1,5 @@
 body {
     font-family: Helvetica;
-    padding-right: 10%;
-    padding-left: 10%;
 }
 
 g {
@@ -64,5 +62,5 @@ g {
 }
 
 .legend .color-rect {
-    padding-right: 5px;
+    margin-right: 5px;
 }

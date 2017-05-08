@@ -33254,7 +33254,7 @@ function loadCSV(csvs) {
     return csvPromises;
 }
 
-},{"../plot/ScatterPlotDataPoint.js":319,"core-js":1,"d3":308}],312:[function(require,module,exports){
+},{"../plot/ScatterPlotDataPoint.js":321,"core-js":1,"d3":308}],312:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33319,9 +33319,11 @@ var loadCSV = require('./lib/loadCSV.js');
 // Import separate pages
 var descriptivePage = require('./pages/descriptive-statistics.js');
 var geoPage = require('./pages/geoplot.js');
+var regressionPage = require('./pages/regression.js');
 
 // Declare javascript in separate scope
-$(function () {
+
+$(document).ready(function () {
 
     // handle navigation
     $('.nav li a').click(function (event) {
@@ -33342,14 +33344,16 @@ $(function () {
             // init all the pages
             descriptivePage.initDescriptive();
             geoPage.initGeoplots();
+            regressionPage.initRegression();
         });
     });
 
     // initialize front page
     $('#frontpage').click();
 });
+$(function () {});
 
-},{"./lib/clusterErrors.js":310,"./lib/loadCSV.js":311,"./lib/loadJSON.js":312,"./pages/descriptive-statistics.js":314,"./pages/geoplot.js":315,"./plot/Geoplot.js":316,"./plot/ScatterPlot.js":318,"./plot/ScatterPlotDataPoint.js":319,"core-js":1,"d3":308,"jquery":309}],314:[function(require,module,exports){
+},{"./lib/clusterErrors.js":310,"./lib/loadCSV.js":311,"./lib/loadJSON.js":312,"./pages/descriptive-statistics.js":314,"./pages/geoplot.js":315,"./pages/regression.js":316,"./plot/Geoplot.js":318,"./plot/ScatterPlot.js":320,"./plot/ScatterPlotDataPoint.js":321,"core-js":1,"d3":308,"jquery":309}],314:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33473,7 +33477,7 @@ function legend(colors, categories) {
     });
 }
 
-},{"../lib/clusterErrors.js":310,"../lib/loadCSV.js":311,"../lib/loadJSON.js":312,"../plot/ScatterPlot.js":318,"../plot/ScatterPlotDataPoint.js":319,"core-js":1,"d3":308,"jquery":309}],315:[function(require,module,exports){
+},{"../lib/clusterErrors.js":310,"../lib/loadCSV.js":311,"../lib/loadJSON.js":312,"../plot/ScatterPlot.js":320,"../plot/ScatterPlotDataPoint.js":321,"core-js":1,"d3":308,"jquery":309}],315:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33526,7 +33530,194 @@ function plotJSON(dataFile, geoFile, colors) {
     });
 }
 
-},{"../lib/clusterErrors.js":310,"../lib/loadCSV.js":311,"../lib/loadJSON.js":312,"../plot/Geoplot.js":316,"core-js":1,"d3":308,"jquery":309}],316:[function(require,module,exports){
+},{"../lib/clusterErrors.js":310,"../lib/loadCSV.js":311,"../lib/loadJSON.js":312,"../plot/Geoplot.js":318,"core-js":1,"d3":308,"jquery":309}],316:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.initRegression = initRegression;
+
+var _d = require('d3');
+
+var d3 = _interopRequireWildcard(_d);
+
+var _BarPlot = require('../plot/BarPlot.js');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+require('core-js');
+var $ = require('jquery');
+
+require('../lib/clusterErrors.js');
+
+var loadJSON = require('../lib/loadJSON.js');
+var loadCSV = require('../lib/loadCSV.js');
+
+function initRegression() {
+
+    var colors = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
+
+    var margin = {
+        top: 20,
+        right: 50,
+        bottom: 200,
+        left: 100
+    };
+
+    // define the same axis for both plots
+    var xAxis = d3.scaleBand();
+    var yAxis = d3.scaleLinear();
+
+    $('.barPlot').html('');
+
+    // let width = d3.select('.barPlot').node().getBoundingClientRect().width - margin.left - margin.right;
+    // let height = d3.select('.plot').node().getBoundingClientRect().height - margin.top - margin.bottom;
+
+    var width = 600;
+    var height = 500;
+
+    // get the svg
+    var svg = d3.select(".barPlot").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    plotJSON('../../data/regression_data.json', svg, height, width, xAxis, yAxis, colors);
+}
+
+function plotJSON(dataFile, svg, height, width, xAxis, yAxis, colors) {
+
+    var promises = loadJSON.loadJSON([dataFile]);
+
+    Promise.all(promises).then(function (values) {
+
+        var data = values[0];
+
+        // Scale the range of the data
+        // extent returns the min and the max
+        var extentY = d3.extent(data, function (dataPoint) {
+            return dataPoint.Importance;
+        });
+        var yRange = extentY[1] - extentY[0];
+
+        xAxis.range([0, width]).domain(data.map(function (d) {
+            return d.Cause;
+        }));
+
+        yAxis.domain([0, extentY[1] + yRange * .05]);
+
+        var barPlot = new _BarPlot.BarPlot(height, width, xAxis, yAxis, data);
+        barPlot.axisLabels(svg, "", "Estimated number people injuried");
+        barPlot.plot(svg, colors);
+    });
+}
+
+},{"../lib/clusterErrors.js":310,"../lib/loadCSV.js":311,"../lib/loadJSON.js":312,"../plot/BarPlot.js":317,"core-js":1,"d3":308,"jquery":309}],317:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.BarPlot = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _d = require('d3');
+
+var d3 = _interopRequireWildcard(_d);
+
+var _Plot2 = require('./Plot.js');
+
+var _ScatterPlotDataPoint = require('./ScatterPlotDataPoint.js');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+require('core-js');
+
+var BarPlot = exports.BarPlot = function (_Plot) {
+    _inherits(BarPlot, _Plot);
+
+    /**
+     * @param dataPoints - Expects an array of ScatterPlotDataPoint
+     */
+    function BarPlot(height, width, xAxis, yAxis, dataPoints) {
+        _classCallCheck(this, BarPlot);
+
+        var _this = _possibleConstructorReturn(this, (BarPlot.__proto__ || Object.getPrototypeOf(BarPlot)).call(this, height, width, xAxis, yAxis));
+
+        _this.dataPoints = dataPoints;
+        return _this;
+    }
+
+    /**
+     * Add the scatterplot
+     * @param svg - the DOM svg element
+     * @param colors - optional color input
+     */
+
+
+    _createClass(BarPlot, [{
+        key: 'plot',
+        value: function plot(svg, colors) {
+
+            // avoid scoping issues
+            var instance = this;
+
+            if (!colors) {
+                // generate a color for each dataPoint
+                colors = new Array(this.dataPoints.length).fill(0).map(function (e) {
+                    return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+                });
+            }
+
+            var barPadding = 1;
+            var formatSignif = d3.format(".0f");
+
+            // Append the tooltip div
+            var tooltip = d3.select("body").append("div").attr("class", "text").style("opacity", 0);
+
+            // Append the plot to the svg
+            var bars = svg.selectAll("g.bar").data(this.dataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
+                tooltip.style("opacity", 1);
+                tooltip.html('<span style="color: black">Accidents</span>: ' + dataPoint.Number + '<br>' + '<span style="color: black">Effect</span>: ' + dataPoint.Effect).style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[i]);
+            }).on("mouseout", function (dataPoint) {
+                tooltip.style("opacity", 0);
+            });
+
+            bars.append("rect").attr("fill", function (d) {
+                return "rgb(0, 0, " + Math.round(d.Importance / 150) + ")";
+            }).attr("x", function (d, i) {
+                return i * (instance.width / instance.dataPoints.length); //Bar width of 20 plus 1 for padding
+            }).attr("y", function (d) {
+                return instance.height - d.Importance / 150; //Height minus data value
+            }).attr("width", instance.width / instance.dataPoints.length - barPadding).attr("height", function (d) {
+                return d.Importance / 150;
+            });
+
+            bars.append("text").text(function (d) {
+                return Math.round(d.Importance);
+            }).attr("x", function (d, i) {
+                return i * (instance.width / instance.dataPoints.length) + (instance.width / instance.dataPoints.length - barPadding) / 2;
+            }).attr("y", function (d) {
+                return instance.height - d.Importance / 150 + 15;
+            }).attr("font-family", "sans-serif").attr("font-size", "10px").attr("fill", "white").attr("text-anchor", "middle");
+
+            // // Add the X Axis
+            svg.append("g").attr("transform", "translate(0," + this.height + ")").call(d3.axisBottom(this.xAxis)).selectAll("text").attr("font-size", "14px").attr("y", 0).attr("x", 9).attr("dy", ".35em").attr("transform", "rotate(75)").style("text-anchor", "start");
+
+            // Add the Y Axis
+            svg.append("g").call(d3.axisLeft(this.yAxis));
+        }
+    }]);
+
+    return BarPlot;
+}(_Plot2.Plot);
+
+},{"./Plot.js":319,"./ScatterPlotDataPoint.js":321,"core-js":1,"d3":308}],318:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33635,7 +33826,7 @@ var Geoplot = exports.Geoplot = function (_Plot) {
     return Geoplot;
 }(_Plot2.Plot);
 
-},{"./Plot.js":317,"core-js":1,"d3":308}],317:[function(require,module,exports){
+},{"./Plot.js":319,"core-js":1,"d3":308}],319:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33739,7 +33930,7 @@ var Plot = exports.Plot = function () {
     return Plot;
 }();
 
-},{"core-js":1,"d3":308}],318:[function(require,module,exports){
+},{"core-js":1,"d3":308}],320:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33867,7 +34058,7 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
     return ScatterPlot;
 }(_Plot2.Plot);
 
-},{"./Plot.js":317,"./ScatterPlotDataPoint.js":319,"core-js":1,"d3":308}],319:[function(require,module,exports){
+},{"./Plot.js":319,"./ScatterPlotDataPoint.js":321,"core-js":1,"d3":308}],321:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
