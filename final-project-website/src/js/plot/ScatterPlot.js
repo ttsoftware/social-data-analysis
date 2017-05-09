@@ -30,8 +30,6 @@ export class ScatterPlot extends Plot {
         let instance = this;
         let instanceDataPoints = $.extend(true, [], this.dataPoints);
 
-        console.log(instanceDataPoints);
-
         if (!colors) {
             // generate a color for each dataPoint
             let colors = new Array(instanceDataPoints.length)

@@ -34023,8 +34023,6 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
             var instance = this;
             var instanceDataPoints = $.extend(true, [], this.dataPoints);
 
-            console.log(instanceDataPoints);
-
             if (!colors) {
                 // generate a color for each dataPoint
                 var _colors = new Array(instanceDataPoints.length).fill(0).map(function (e) {

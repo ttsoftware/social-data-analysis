@@ -1,10 +1,12 @@
 <div class="row">
     <h1>Descriptive statistics</h1>
     <p>
-        Around 19% of all accidents in New York City in the period of July 2012 to March 2017 cause at least one injury. On this page, we’ll delve a little further into how these injuries are distributed across time and space: <i>When and where do they happened?</i>        We have calculated and visualized a series of distributions about time, space and weather. We will show these in the following.
+        Around 19 pct. of all accidents in New York City in the period of July 2012 to March 2017 cause at least one injury. On this page, we’ll delve a little further into how these injuries are distributed across time and space: <i>When and where do they happened?</i>
+        We have calculated and visualized a series of distributions of time, space, and weather. We will show these in the following.
     </p>
     <p>
-        Let’s start with some basic graph on the temporal distributions of the injuries. Below, we have produced four visualizations which each illustrate a temporal aspects of the accidents.
+        Let’s start with some basic graph on the temporal distributions of the injuries.
+        Below, we have produced four visualizations which each illustrate a temporal aspects of the accidents.
     </p>
 </div>
 
@@ -28,18 +30,20 @@
 <div class="row">
     <p>
         As the figure in the upper left corner shows, there has been a decrease in injuries between 2013 and 2014, but since 2015 there has been a rise in incidents. In 2016, around 42000 accidents caused at least one injury. There has thus been an increase in
-        injuries by 6,8%. In 2013, the mayor of New York City, Bill de Blasio, launched the program ‘Vision Zero’ which was set to increase traffic safety on the streets. The effect of this has not yet been visible – quite the opposite. <br />        The figure in the upper right corner shows the distribution of injuries by hour. There seem to be some peaks in the rush hour periods between 08.00-10.00 and 16.00-19.00. These are the moments where people are either making their way to work og
-        travelling back home. The amount of vehicles on the streets are then assumed to be higher which may explain the distribution of the peaks. <br /> The figure in the lower left corner shows the distribution of injuries by weekday. There does not
-        seem to be as large swings between the weekdays as between the hour bins, but a few trends can still be located. Friday is the day with the most injuries, whereas the weekends, and especially sunday, has less injuries. The decrease in injuries
-        in the weekends may be due to less vehicles on the streets as many people have the day off. <br /> The last figure in the lower right corner shows the distribution of injuries by month. We see a peak in the summer months, which may be due to an
-        increase in tourists. We also see a decrease in injuries in the first half of the year as well as an increase in November and December. This may be due to bad weather conditions from e.g. snow or ice.
+        injuries by 6,8%.
+        The figure in the upper right corner shows the distribution of injuries by hour. There seem to be some peaks in the rush hour periods between 08.00-10.00 and 16.00-19.00. These are the moments where people are either making their way to work or travelling
+        back home. The amount of vehicles on the streets are then assumed to be higher which may explain the distribution of the peaks. <br /> The figure in the lower left corner shows the distribution of injuries by weekday. There does not seem
+        to be as large swings between the weekdays as between the hour bins, but a few trends can still be located. Friday is the day with the most injuries, whereas the weekends, and especially sunday, has less injuries. The decrease in injuries in the
+        weekends may be due to less vehicles on the streets as many people have the day off. <br />
+        The last figure in the lower right corner shows the distribution of injuries by month. We see a peak in the summer months, which may be due to an increase in tourists. We also see a decrease in injuries in the first half of the year as well as an increase in November and December.
+        The latter may be due to bad weather conditions from e.g. snow or ice.
     </p>
     <p>
         So what can we learn from this? The following four trends can be constructed.
 
         <ul>
             <li>
-                An increase in injuries since 2014.
+                An increase in injuries since 2015.
             </li>
             <li>
                 Injuries tend to happen more frequently during the rush hour periods.
@@ -61,7 +65,16 @@
 <div class="row">
     <h3>Injuries and accidents for the boroughs</h3>
     <p>
-        In the interactive scatterplot, each borough is plotted according to the number of accidents pr. 100.000 inhabitants, on the y-axis, and the number of injuries pr. 100.000 inhabitants, on the x-axis. In order to construct the dataset for this plot, the NYC vehicle collision data has been enriched with data on borough population. The dots’ sizes are scaled according to the ratio between the number of accidents and the number of injuries. Larger dot have more relatively more injuries pr. accident than smaller dots. It is possible to toggle between the years from 2013 to 2016. Manhattan is the smallest dot in all the years, but it is also the the borough with most accidents. Thus the scatterplot shows, that Manhattan has by far the most accidents, but when they happen, fewer of them are critical when it comes to damage on people. It could be explained by the fact, that Manhattan is the most central part of NYC, and thus has a lot of dense traffic. The vehicles might not reach high speeds in the city centre. For all years, Brooklyn is the borough with most accidents pr. 100.000 inhabitants. Staten Island is the NYC borough where it is safest for humans to use the streets. That there is a different injury/accident ratio for the Boroughs indicated, that Borough could be an important variable when it comes to predicting whether a person is injured in an accident.
+        In the interactive scatterplot below, each borough is plotted according to the number of accidents pr. 100.000 inhabitants, on the y-axis, and the number of injuries pr. 100.000 inhabitants, on the x-axis. In order to construct the dataset for this plot, the
+        NYC vehicle collision data has been enriched with data on borough population.
+        The dots’ sizes are scaled according to the ratio between the number of accidents and the number of injuries.
+        Larger dots have relatively more injuries pr. accident than smaller dots.
+        It is possible to toggle between the years from 2013 to 2016.
+        Manhattan is the smallest dot through all the years, but it is also the the borough with the most accidents per inhabitant.
+        Thus the scatterplot shows, that Manhattan has by far the most
+        accidents, but when they happen, fewer of them are critical when it comes to damage on people. It could be explained by the fact, that Manhattan is the most central part of NYC, and thus has a lot of dense traffic. The vehicles might not reach
+        high speeds in the city centre. For all years, Brooklyn is the borough with most accidents pr. 100.000 inhabitants. Staten Island is the NYC borough where it is safest for humans to use the streets.
+        The fact that there is a different injury to accident ratio for the Boroughs indicates that Borough could be an important variable, when it comes to predicting whether a person is injured in an accident or not.
     </p>
 </div>
 <div class="row mt-50">
@@ -89,7 +102,8 @@
         We were able to get weather data in New York between 2012-2017 by submitting a request to the National Oceanic and Atmospheric Administration of U.S. Department of Commerce (NOAA).
     </p>
     <p>
-        We wanted to see if the weather was a major contributor to the amount of traffic accidents occuring in New York city.<br /> We were able to get the following attributes:
+        We wanted to see if the weather was a major contributor to the amount of traffic accidents occuring in New York City.<br />
+        We were able to get the following attributes:
         <ul>
             <li>
                 PRCP - precipitation (including snow, hail, etc.)
@@ -110,12 +124,15 @@
         Source: <a href="https://www.ncdc.noaa.gov/cdo-web/orders?email=tt%40ttsoftware.net&id=949826" target="_blank">NOAA</a>
     </p>
     <p>
-        We tested the traffic data for a correlation with the weather factors using the Pearson correlation. <br /> Precipitation which includes rain, snowfall, hail was only correlated 14.6% with the accident count, and only 11.5% correlated with the
-        number of persons injured. <br /> Temperature on the hand turned out to be 18.3% correlated with the accident count, and 45.2% correlated with the number of persons injured. <br /> Study suggest this is due to the fact that people are more likely
-        to be outside the warmer the weather on foot, and thus more vulnerable when involved in an accident. <br /> This means that with increasing temperatures, the likelyhood of getting injured in a traffic accident increases. <br /> Source: <a href="http://www.rff.org/research/publications/how-climate-change-affects-traffic-accidents"
-            target="_blank">
+        We tested the traffic data for a correlation with the weather factors using the Pearson correlation coefficient. <br />
+        Precipitation which includes rain, snowfall and hail only correlated 14.6% with the accident count, and correlated only 11.5% with
+        the number of persons injured. <br />
+        Temperature on the other hand turned out to be 18.3% correlated with the accident count, and 45.2% correlated with the number of persons injured. <br /> Study suggests this is due to the fact that people are more
+        likely to be outside on foot in the warmer weather, and thus more vulnerable when involved in an accident. <br /> This means that with increasing temperatures, the likelyhood of getting injured in a traffic accident increases. <br /> Source:
+        <a
+            href="http://www.rff.org/research/publications/how-climate-change-affects-traffic-accidents" target="_blank">
             How Climate Change Affects Traffic Accidents
-        </a>
+            </a>
     </p>
 </div>
 <div class="row">
@@ -123,6 +140,7 @@
 </div>
 <div class="row">
     <p>
-        In the above plot we see the correlation between temperature and injuries. <br /> Dispite the spread there is a clear upwards trend in the number of persons injured when the temperature increases.
+        In the above plot we see the correlation between temperature and injuries. <br />
+        Despite the spread there is a clear upwards trend in the number of persons injured when the temperature increases.
     </p>
 </div>
