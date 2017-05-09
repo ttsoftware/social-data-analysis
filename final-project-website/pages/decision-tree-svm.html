@@ -1,19 +1,322 @@
 <h1>Predicting injuries</h1>
 
 <p>
-    Given the large amount of historical data available to us,
-    we would like to investigate whether or not accident responses can be improved by predicting whether or not an accident will involve an injury.
-    If an injury is likely to occur at a given accident,
+    Given the large amount of historical data available to us, we would like to investigate whether or not accident responses can be improved by predicting whether or not an accident will involve an injury. If an injury is likely to occur at a given accident,
     the 911 response team or officers on scene might more quickly be able to decide whether or not an ambulance is needed.
 </p>
 
+<p>
+    We made three datasets with different compositions in order to strengthen our testing and validation by trying to simulate out-of-sample validation.<br />
+    The first dataset is the "original" dataset of ~700,000 rows. This dataset is purged of rows with missing zip codes. We sampled from this dataset when training. <br />
+    The second dataset has a 50/50 ratio between accidents with injuries and accidents without injuries.<br />
+    In order to make this dataset, we sampled all the rows with 1 or more injured and combined these row with an equal amount of randomly sampled datapoints from the original dataset. <br />
+    The third dataset contains only the rows from the original dataset with 1 or more injured.
+</p>
+<p>
+    The per-data-point parameters used for this classification were
+    <ul>
+        <li>
+            <b>BOROUGH_enum</b>
+            <ul>
+                <li>
+                    We found this parameter by assigning a unique number to each borough.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>VEHICLE_enum</b>
+            <ul>
+                <li>
+                    We found this parameter by assigning a unique number to each unique vehicle type.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>CONTRIBUTION_enum</b>
+            <ul>
+                <li>
+                    We found this parameter by assigning a unique number to each unique type of contributing factor.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>MULTIPLE_VEHICLES</b>
+            <ul>
+                <li>
+                    We found this parameter by assigning checking whether or not there are more than one vehicle involved in the accident.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>WEEK_DAY</b>
+            <ul>
+                <li>
+                    We found this parameter by extracting which day of the week the accident occured.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>TIME_ENUM</b>
+            <ul>
+                <li>
+                    We found this parameter by assigning a unique number 0-23 depending on in which hour the accident occured.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>DATE_ENUM</b>
+            <ul>
+                <li>
+                    We found this parameter by assigning a unique number to each date.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>ZIP CODE</b>
+            <ul>
+                <li>
+                    Simply the existing zip code of the accident. All accidents without a zip code has been removed.
+                </li>
+            </ul>
+        </li>
+    </ul>
+</p>
+
+<hr />
+
 <h2>Decision Trees</h2>
+
+<hr />
 
 <h2>Support Vector Machines</h2>
 
 <p>
-    In order to classify whether or not a an accident would involve 1 or more injuried, we chose to use Support Vector Machines (SVM) since it is a commonly used supervised classifier for binary classification.
+    In order to classify whether or not a an accident would involve 1 or more injuried, we chose to use the commonly used supervised classifier Support Vector Machines (SVM) for binary classification.
 </p>
 <p>
+    We used the python library sklearn's builtin support vector classifier for performing the classification. <br />
+    We used three different settings for the support vector classifer: <br />
 
+    <ul>
+        <li>
+            Setting 1: C=1, gamma=1/8, kernel=rbf
+        </li>
+        <li>
+            Setting 2: C=1, gamma=0.001, kernel=rbf
+        </li>
+        <li>
+            Setting 3: C=100, gamma=0.001, kernel=rbf
+        </li>
+    </ul>
+
+    <small>C is the SVM error term.</small>
+    <small>Gamma is the kernel coefficient which determines how sensitive SVM is to the distance from a data point to the decision boundary.</small>
+    <small>Kernel is the kernel function used for non-linear classification. Rbf is the radial basis function kernel.</small>
+</p>
+<p>
+    The tables below show the results after training on 80000 random samples and testing and validating on 10000 random samples. <br />
+</p>
+<div>
+    <h3>Setting 1</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+
+                </th>
+                <th>
+                    Training accuracy
+                </th>
+                <th>
+                    Test accuracy
+                </th>
+                <th>
+                    Validation accuracy
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Original dataset
+                </td>
+                <td>
+                    0.8083
+                </td>
+                <td>
+                    0.8126
+                </td>
+                <td>
+                    0.803296119086
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    50/50 dataset
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    0.5033
+                </td>
+                <td>
+                    0.5033
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Only injuries dataset
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    0.803296119086
+                </td>
+                <td>
+                    0.793195108985
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <h3>Setting 2</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+
+                </th>
+                <th>
+                    Training accuracy
+                </th>
+                <th>
+                    Test accuracy
+                </th>
+                <th>
+                    Validation accuracy
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Original dataset
+                </td>
+                <td>
+                    0.8162625
+                </td>
+                <td>
+                    0.7988
+                </td>
+                <td>
+                    0.8039
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    50/50 dataset
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    0.5001
+                </td>
+                <td>
+                    0.5041
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Only injuries dataset
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    0.504802561366
+                </td>
+                <td>
+                    0.505072076882
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <h3>Setting 3</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+
+                </th>
+                <th>
+                    Training accuracy
+                </th>
+                <th>
+                    Test accuracy
+                </th>
+                <th>
+                    Validation accuracy
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Original dataset
+                </td>
+                <td>
+                    0.789575
+                </td>
+                <td>
+                    0.7897
+                </td>
+                <td>
+                    0.7896
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    50/50 dataset
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    0.5162
+                </td>
+                <td>
+                    0.509
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Only injuries dataset
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    0.184252811998
+                </td>
+                <td>
+                    0.184788430637
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr />
+
+<h2>Conclusion</h2>
+
+<p>
+    As seen in the tables above we are not able to firmly predict whether or not an injury will occur using SVM classification.<br />
+    We observe around 50% accuracy on the 50/50 dataset for all three settings, which suggests that the model is no better than randomly guessing.
 </p>

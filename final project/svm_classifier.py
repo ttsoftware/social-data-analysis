@@ -10,7 +10,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 
 # traffic_data = pandas.read_csv('traffic_data_has_injured_clean_zip_dummie_columns_day_of_week_50-50.csv')
-traffic_data = pandas.read_csv('traffic_data_has_injured_clean_zip_dummie_columns_day_of_week.csv')
+traffic_data = pandas.read_csv('traffic_data_has_injured_clean_zip_dummie_columns_day_of_week_50-50.csv')
 
 # print traffic_data.columns.values
 
@@ -135,9 +135,6 @@ test_injuries_targets = test_injuries['HAS_INJURED']
 validate_injuries_predictors = validate_injuries[dummie_columns]
 validate_injuries_targets = validate_injuries['HAS_INJURED']
 
-estimator = SVC(kernel='rbf')
-estimator.fit(train_predictors, train_targets)
-
 # Use Principal Component Analysis to reduce dimensionality and improve generalization
 # pca = decomposition.PCA()
 # svm = SVC()
@@ -160,16 +157,28 @@ estimator.fit(train_predictors, train_targets)
 # print estimator.best_params_, estimator.best_score_
 # print pca.inverse_transform
 
+# estimator = SVC(C=1, kernel='rbf', gamma=0.001)
+# estimator.fit(train_predictors, train_targets)
+
+# load it again
+with open('svm_classifier_100000_gamma_1.pkl', 'rb') as fid:
+    estimator = cPickle.load(fid)
+
+print "Train"
+print estimator.score(train_predictors, train_targets)
+
+print "Test"
 print estimator.score(test_predictors, test_targets)
+
+print "Validation"
 print estimator.score(validate_predictors, validate_targets)
 
+print "Only injuries test"
 print estimator.score(test_injuries_predictors, test_injuries_targets)
+
+print "Only injuries validation"
 print estimator.score(validate_injuries_predictors, validate_injuries_targets)
 
 # store model for further usage
-with open('svm_classifier_100000_cross_validation.pkl', 'wb') as fid:
-    cPickle.dump(estimator, fid)
-
-# load it again
-# with open('my_dumped_classifier.pkl', 'rb') as fid:
-#     classifier_loaded = cPickle.load(fid)
+# with open('svm_classifier_100000_gamma_1.pkl', 'wb') as fid:
+#     cPickle.dump(estimator, fid)

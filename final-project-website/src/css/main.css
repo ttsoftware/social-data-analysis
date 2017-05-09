@@ -43,6 +43,26 @@ html {
 
 body {
     margin-bottom: 50px;
+    font-family: Helvetica;
+}
+
+h1, h2, h3 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+hr {
+    border-color: lightgray;
+    margin-top: 80px;
+    margin-bottom: 50px;
+}
+
+ul {
+    list-style: none;
+}
+
+ul li {
+    list-style: none;
 }
 
 .banner {
@@ -63,7 +83,6 @@ body {
 }
 
 .navigation {
-    margin-bottom: 30px;
     width: 100%;
     background-color: #161515;
 }
@@ -103,14 +122,13 @@ body {
 }
 
 .content-container {
-    min-height: 55vh;
-    margin-bottom: 30px;
-    display: flex
+    display: flex;
 }
 
 #content-container {
     padding: 20px;
     width: 100%;
+    font-size: 1.2em;
 }
 
 .boroughInjuriesContainer {
