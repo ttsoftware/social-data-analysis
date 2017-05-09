@@ -60,3 +60,7 @@ g {
 .legend .color-rect {
     margin-right: 5px;
 }
+
+#yearSelect {
+    margin-top: 10px;
+}
