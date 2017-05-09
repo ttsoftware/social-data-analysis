@@ -247,8 +247,10 @@ traffic_data_50 = pandas.read_csv('traffic_data_has_injured_clean_zip_dummie_col
 # reduce data set to 100000 rows
 print len(traffic_data)
 traffic_data = traffic_data.sample(200000)
+
 # select first 100000 as injuries data set
 traffic_data_injuries = traffic_data.head(100000)
+
 # select last 100000 as regular data set
 traffic_data = traffic_data.tail(100000)
 
