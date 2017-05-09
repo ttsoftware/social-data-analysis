@@ -30,7 +30,7 @@ function plotJSON(dataFile, geoFile, colors) {
         geoFile
     ]);
 
-    let width = 950;
+    let width = 700;
     let height = 800;
 
     //Create SVG elements
@@ -54,7 +54,7 @@ function plotJSON(dataFile, geoFile, colors) {
         geoPlotAccidents.plot(
             svgAccidents,
             (d) => {
-                return d['ACCIDENTS'] / 40;
+                return d['ACCIDENTS'] / 70;
             },
             colors
         );
@@ -62,9 +62,49 @@ function plotJSON(dataFile, geoFile, colors) {
         geoPlotRatio.plot(
             svgRatio,
             (d) => {
-                return d['RATIO'] * 40;
+                return d['RATIO'] * 30;
             },
             colors
         );
+
+        legendGeo(
+            '#legendGeoAccident',
+            colors, [
+                'Most injuries',
+                'Most accidents',
+                'Top 25 injuries & accidents',
+            ]);
+
+        legendGeo(
+            '#legendGeoRatio',
+            colors, [
+                'Most injuries',
+                'Most accidents',
+                'Top 25 injuries & accidents',
+            ]);
+    });
+}
+
+function legendGeo(selector, colors, categories) {
+
+    d3.select(selector).append('ul');
+
+    categories.forEach(function(category, i) {
+
+        let listElement = d3.select(selector + ' ul')
+            .append('li');
+
+        listElement
+            .append("svg")
+            .attr("class", "color-rect")
+            .attr("width", 15)
+            .attr("height", 15)
+            .append("rect")
+            .attr("height", 15)
+            .attr("width", 15)
+            .attr("fill", colors[i]);
+
+        listElement.append('span')
+            .text(category);
     });
 }

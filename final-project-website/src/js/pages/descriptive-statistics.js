@@ -142,16 +142,16 @@ function plotCSV(svg, xAxis, yAxis, height, width, colors, categories, dataPoint
 
 function legend(colors, categories) {
 
-    if (d3.select('.legend ul').node()) {
+    if (d3.select('#legend ul').node()) {
         // only add the legend once
         return;
     }
 
-    d3.select('.legend').append('ul');
+    d3.select('#legend').append('ul');
 
     categories.forEach(function(category, i) {
 
-        let listElement = d3.select('.legend ul')
+        let listElement = d3.select('#legend ul')
             .append('li');
 
         listElement

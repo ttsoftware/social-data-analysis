@@ -33470,16 +33470,16 @@ function plotCSV(svg, xAxis, yAxis, height, width, colors, categories, dataPoint
 
 function legend(colors, categories) {
 
-    if (d3.select('.legend ul').node()) {
+    if (d3.select('#legend ul').node()) {
         // only add the legend once
         return;
     }
 
-    d3.select('.legend').append('ul');
+    d3.select('#legend').append('ul');
 
     categories.forEach(function (category, i) {
 
-        var listElement = d3.select('.legend ul').append('li');
+        var listElement = d3.select('#legend ul').append('li');
 
         listElement.append("svg").attr("class", "color-rect").attr("width", 15).attr("height", 15).append("rect").attr("height", 15).attr("width", 15).attr("fill", colors[i]);
 
@@ -33523,7 +33523,7 @@ function plotJSON(dataFile, geoFile, colors) {
 
     var promises = loadJSON.loadJSON([dataFile, geoFile]);
 
-    var width = 950;
+    var width = 700;
     var height = 800;
 
     //Create SVG elements
@@ -33539,12 +33539,30 @@ function plotJSON(dataFile, geoFile, colors) {
         var geoPlotRatio = new _Geoplot.Geoplot(height, width, geodata, data);
 
         geoPlotAccidents.plot(svgAccidents, function (d) {
-            return d['ACCIDENTS'] / 40;
+            return d['ACCIDENTS'] / 70;
         }, colors);
 
         geoPlotRatio.plot(svgRatio, function (d) {
-            return d['RATIO'] * 40;
+            return d['RATIO'] * 30;
         }, colors);
+
+        legendGeo('#legendGeoAccident', colors, ['Most injuries', 'Most accidents', 'Top 25 injuries & accidents']);
+
+        legendGeo('#legendGeoRatio', colors, ['Most injuries', 'Most accidents', 'Top 25 injuries & accidents']);
+    });
+}
+
+function legendGeo(selector, colors, categories) {
+
+    d3.select(selector).append('ul');
+
+    categories.forEach(function (category, i) {
+
+        var listElement = d3.select(selector + ' ul').append('li');
+
+        listElement.append("svg").attr("class", "color-rect").attr("width", 15).attr("height", 15).append("rect").attr("height", 15).attr("width", 15).attr("fill", colors[i]);
+
+        listElement.append('span').text(category);
     });
 }
 

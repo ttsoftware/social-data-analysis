@@ -2,9 +2,27 @@
     <h1>Geographic plots</h1>
 </div>
 <div class="row">
-    <img width="900" src="./src/images/injuries_heat_map_light.png" />
+    <p>
+        On the page ‘Descriptive Statistics’, we found some trends on when and where traffic accidents causing at least one injury tend to happen the most. On this page, we will focus on the geographical distribution of injuries. In order to pursuit the goal
+        of reducing the amount of injuries in the city, it is important to know where the local government should target first and most efficiently. This page comes with some suggestions for this question.
+    </p>
+    <p>
+        To get a sense of the geographical distribution of accidents causing injuries, we have produced a heatmap of New York City. The map illustrates places where injuries are concentrated. The map should be read like this: The darker red the area of the map
+        is, the more injuries have happened in that area. In the map, we see a high concentration of injuries at the lowers parts of Manhattan, south of Central Park, as well as a few areas in upper Manhattan and Bronx. A few points of concentration can
+        also be found in Brooklyn where some very dark red areas proliferate around Brownsville in East New York. Accidents causing injuries are then happening at some places more than others.
+    </p>
 </div>
+
 <div class="row mt-50">
+    <img class="img-rounded img-responsive" src="./src/images/injuries_heat_map_light.png" />
+</div>
+
+<div class="row">
+    <hr />
+</div>
+
+<div class="row">
+    <h3>Top 25 intersections</h3>
     <p>
         In the geomap below, the 25 places in NYC with the most accidents are plotted alongside the 25 places with most injuries. The yellow dots represent the places with most accidents in the city, and the orange dots represents the places with most injuries
         in the city. The red dots, are the places which are present on the top 25 list of accidents and the top 25 list of injuries. The dots are scaled after the number accidents which have taken place there, in the period of analysis. If you hover you
@@ -15,6 +33,33 @@
 </div>
 
 <div class="row">
-    <div class="svgContainerGeoAccidents"></div>
-    <div class="svgContainerGeoRatio"></div>
+    <div class="svgContainerGeoAccidents">
+        <div id="legendGeoAccident" class="legend"></div>
+    </div>
+
+    <div class="svgContainerGeoRatio">
+        <div id="legendGeoRatio" class="legend"></div>
+    </div>
+</div>
+<div class="row">
+    <hr />
+</div>
+<div class="row">
+    <h3>Case study: Belt Parkway, Shore Parkway &amp; Gowanus Expressway </h3>
+    <p>
+        As the maps above suggested, the places with the most vehicle accidents are not always the same as the places with the most accidents causing an injury. Some intersections have a very high injury to accident ratio: Many of the accidents cause injuries
+        in those places. In order to get a better understanding of what may be happening at these places, we have chosen to take a grounded look at the intersection with the highest injury per accidents ratio with Google Street View function. With a ratio
+        of 37%, we find the intersection of Belt Parkway, Shore Parkway and Gowanus Express. We have taken the following two pictures with google street view. As the picture suggests, this location is characterized by the interlacement of three big roads.
+        It is hard to tell what exactly is causing the many injuries at this location. One theory could be that high speeds (the roads are expressways) combined with interlacement may create dangerous situations. However, further qualitative assessment
+        of this interlacement is needed. It could be interesting to see video material of this specific intersection.
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-lg-6 mt-50">
+        <img class="img-rounded img-responsive" src="./src/images/billede-til-casestudy.png" />
+    </div>
+    <div class="col-md-12 col-lg-6 mt-50">
+        <img class="img-rounded img-responsive" src="./src/images/billede-til-hjemmeside.png" />
+    </div>
 </div>
