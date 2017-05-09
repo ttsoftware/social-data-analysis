@@ -33334,7 +33334,7 @@ $(document).ready(function () {
         var id = event.target.id;
         var anchor = $('#' + id);
 
-        fetch('/pages/' + id + '.html').then(function (response) {
+        fetch('./../pages/' + id + '.html').then(function (response) {
             return response.text();
         }).then(function (text) {
             // set this nav element as active
@@ -33394,7 +33394,7 @@ function initDescriptive() {
     var xAxis = d3.scaleLinear();
     var yAxis = d3.scaleLinear();
 
-    var csvPromises = loadCSV.loadCSV(['data/trafficdata2013.csv', 'data/trafficdata2014.csv', 'data/trafficdata2015.csv', 'data/trafficdata2016.csv'], 'Injury per 100000 inhabitant', 'Accident per 100000 inhabitant', 'RATIO', 'BOROUGH');
+    var csvPromises = loadCSV.loadCSV(['./../../data/trafficdata2013.csv', './../../data/trafficdata2014.csv', './../../data/trafficdata2015.csv', './../../data/trafficdata2016.csv'], 'Injury per 100000 inhabitant', 'Accident per 100000 inhabitant', 'RATIO', 'BOROUGH');
 
     Promise.all(csvPromises).then(function (values) {
 
@@ -33506,7 +33506,7 @@ function initGeoplots() {
     // let colors = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
     var colors = ['#F26D21', '#EBC944', '#C02F1D'];
 
-    plotJSON('../data/top_25_samlet.json', '../data/nycboroughboundaries.geojson', colors);
+    plotJSON('./../../data/top_25_samlet.json', './../../data/nycboroughboundaries.geojson', colors);
 }
 
 function plotJSON(dataFile, geoFile, colors) {
@@ -33580,7 +33580,7 @@ function initRegression() {
     // get the svg
     var svg = d3.select(".barPlot").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    plotJSON('../../data/regression_data.json', svg, height, width, xAxis, yAxis, colors);
+    plotJSON('./../../data/regression_data.json', svg, height, width, xAxis, yAxis, colors);
 }
 
 function plotJSON(dataFile, svg, height, width, xAxis, yAxis, colors) {

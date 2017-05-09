@@ -35,7 +35,7 @@ $(document).ready(() => {
         let id = event.target.id;
         let anchor = $('#' + id);
 
-        fetch('/pages/' + id + '.html').then((response) => {
+        fetch('./../pages/' + id + '.html').then((response) => {
             return response.text();
         }).then((text) => {
             // set this nav element as active

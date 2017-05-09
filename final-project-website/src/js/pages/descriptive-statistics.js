@@ -30,10 +30,10 @@ export function initDescriptive() {
     let yAxis = d3.scaleLinear();
 
     let csvPromises = loadCSV.loadCSV([
-            'data/trafficdata2013.csv',
-            'data/trafficdata2014.csv',
-            'data/trafficdata2015.csv',
-            'data/trafficdata2016.csv',
+            './../../data/trafficdata2013.csv',
+            './../../data/trafficdata2014.csv',
+            './../../data/trafficdata2015.csv',
+            './../../data/trafficdata2016.csv',
         ],
         'Injury per 100000 inhabitant',
         'Accident per 100000 inhabitant',
