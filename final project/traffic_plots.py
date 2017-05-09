@@ -38,6 +38,17 @@ print correlation['TAVG']['ACCIDENT COUNT']
 print correlation['TAVG']['NUMBER OF PERSONS INJURED']
 print correlation['TAVG']['NUMBER OF PERSONS KILLED']
 
+fig = plt.figure(1)
+# We define a fake subplot that is in fact only the plot.
+plot = fig.add_subplot(111)
 
-plt.plot(traffic_data['TAVG'], traffic_data['NUMBER OF PERSONS INJURED'], 'ro')
+# We change the fontsize of minor ticks label
+plot.tick_params(axis='both', which='major', labelsize=20)
+plot.tick_params(axis='both', which='minor', labelsize=20)
+
+plt.xlabel('Average temperature (min-max normalized)', fontsize=20)
+plt.ylabel('Number of persons injured', fontsize=20)
+plt.plot(traffic_data['TAVG'], traffic_data['NUMBER OF PERSONS INJURED'], 'o', color='#C02F1D')
+
 plt.show()
+

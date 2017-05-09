@@ -6,6 +6,7 @@ import numpy as np
 import pandas
 from sklearn import preprocessing
 from sklearn.svm import SVC
+from matplotlib import pyplot as plt
 
 traffic_data_set = pandas.read_csv('traffic_data.csv')
 traffic_data_set['DATETIME'] = pandas.to_datetime(traffic_data_set['DATE'])
@@ -137,6 +138,8 @@ print correlation['TAVG']['NUMBER OF PERSONS KILLED']
 
 # plt.plot(traffic_data['TAVG'], traffic_data['NUMBER OF PERSONS INJURED'], 'ro')
 # plt.show()
+#
+# exit(0)
 
 # fix zip codes in data set
 

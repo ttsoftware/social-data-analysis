@@ -1,16 +1,74 @@
-Show some interesting distributions. This is about getting to know the data without any big analytics so far.
+<div class="row">
+    <h1>Descriptive statistics</h1>
 
-<div class="plot">
+    <p>
+        Show some interesting distributions. This is about getting to know the data without any big analytics so far.
+    </p>
+</div>
 
-    <div class="boroughInjuriesContainer"></div>
-    <div class="legend"></div>
-    <form class="form-inline">
-        <select id="yearSelect" class="form-control">
+<div class="row">
+    <div class="plot">
+        <div class="boroughInjuriesContainer"></div>
+        <div class="legend"></div>
+        <form class="form-inline">
+            <select id="yearSelect" class="form-control">
             <option selected="selected" value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
             <option value="2016">2016</option>
         </select>
-    </form>
+        </form>
+    </div>
+</div>
 
+<div class="row">
+    <hr />
+</div>
+
+<div class="row">
+    <h3>Temperature as a cause?</h3>
+    <p>
+        We were able to get weather data in New York between 2012-2017 by submitting a request to the National Oceanic and Atmospheric Administration of U.S. Department of Commerce (NOAA).
+    </p>
+    <p>
+        We wanted to see if the weather was a major contributor to the amount of traffic accidents occuring in New York city.<br />
+        We were able to get the following attributes:
+        <ul>
+            <li>
+                PRCP - precipitation (including snow, hail, etc.)
+            </li>
+            <li>
+                SNWD - snow depth data (centimeters)
+            </li>
+            <li>
+                TAVG - temperature average (Celcius)
+            </li>
+            <li>
+                TMAX - temperature max (Celcius)
+            </li>
+            <li>
+                TMIN - temperature min (Celcius)
+            </li>
+        </ul>
+        Source: <a href="https://www.ncdc.noaa.gov/cdo-web/orders?email=tt%40ttsoftware.net&id=949826" target="_blank">NOAA</a>
+    </p>
+    <p>
+        We tested the traffic data for a correlation with the weather factors using the Pearson correlation. <br />
+        Precipitation which includes rain, snowfall, hail was only correlated 14.6% with the accident count, and only 11.5% correlated with the number of persons injured. <br />
+        Temperature on the hand turned out to be 18.3% correlated with the accident count, and 45.2% correlated with the number of persons injured. <br />
+        Study suggest this is due to the fact that people are more likely to be outside the warmer the weather on foot, and thus more vulnerable when involved in an accident. <br />
+        This means that with increasing temperatures, the likelyhood of getting injured in a traffic accident increases. <br />
+        Source: <a href="http://www.rff.org/research/publications/how-climate-change-affects-traffic-accidents" target="_blank">
+            How Climate Change Affects Traffic Accidents
+        </a>
+    </p>
+</div>
+<div class="row">
+    <img width="900" src="./src/images/weather_figure_small.png" style="margin: 20px;" />
+</div>
+<div class="row">
+    <p>
+        In the above plot we see the correlation between temperature and injuries. <br />
+        Dispite the spread there is a clear upwards trend in the number of persons injured when the temperature increases.
+    </p>
 </div>

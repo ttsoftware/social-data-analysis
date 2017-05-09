@@ -62,7 +62,7 @@ ul {
 }
 
 .row ul li {
-    list-style: none;
+    list-style: lower-greek;
     margin-bottom: 10px
 }
 
