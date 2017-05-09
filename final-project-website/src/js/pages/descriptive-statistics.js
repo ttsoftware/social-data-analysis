@@ -41,7 +41,7 @@ export function initDescriptive() {
     let margin = {
         top: 20,
         right: 50,
-        bottom: 50,
+        bottom: 70,
         left: 70
     };
 
