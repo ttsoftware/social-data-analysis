@@ -42,7 +42,7 @@ export function initRegression() {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    plotJSON('./../../data/regression_data.json', svg, height, width, xAxis, yAxis, colors)
+    plotJSON('./data/regression_data.json', svg, height, width, xAxis, yAxis, colors)
 }
 
 

@@ -17,8 +17,8 @@ export function initGeoplots() {
     let colors = ['#F26D21', '#EBC944', '#C02F1D'];
 
     plotJSON(
-        './../../data/top_25_samlet.json',
-        './../../data/nycboroughboundaries.geojson',
+        './data/top_25_samlet.json',
+        './data/nycboroughboundaries.geojson',
         colors
     );
 }
