@@ -10,7 +10,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 
 # traffic_data = pandas.read_csv('traffic_data_has_injured_clean_zip_dummie_columns_day_of_week_50-50.csv')
-traffic_data = pandas.read_csv('traffic_data_has_injured_clean_zip_dummie_columns_day_of_week_50-50.csv')
+traffic_data = pandas.read_csv('traffic_data_has_injured_clean_zip_dummie_columns_day_of_week.csv')
 
 # print traffic_data.columns.values
 
@@ -96,11 +96,11 @@ traffic_data['MULTIPLE_VEHICLES'] = traffic_data['VEHICLE TYPE CODE 2'] != 0
 print len(traffic_data)
 traffic_data = traffic_data.sample(100000)
 
-traffic_test_data = traffic_data[traffic_data['NUMBER OF PERSONS INJURED'] > 0]
+traffic_injuries_only = traffic_data[traffic_data['NUMBER OF PERSONS INJURED'] > 0]
 
 # select train and test set
 train, validate, test = np.split(traffic_data.sample(frac=1), [int(.8*len(traffic_data)), int(.9*len(traffic_data))])
-_, validate_injuries, test_injuries = np.split(traffic_test_data.sample(frac=1), [int(.8*len(traffic_test_data)), int(.9*len(traffic_test_data))])
+_, validate_injuries, test_injuries = np.split(traffic_injuries_only.sample(frac=1), [int(.8 * len(traffic_injuries_only)), int(.9 * len(traffic_injuries_only))])
 
 print train.shape, validate.shape, test.shape
 

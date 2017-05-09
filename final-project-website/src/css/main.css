@@ -48,12 +48,12 @@ body {
 
 h1, h2, h3 {
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 hr {
-    border-color: lightgray;
-    margin-top: 80px;
+    border-color: #C02F1D;
+    margin-top: 60px;
     margin-bottom: 50px;
 }
 
