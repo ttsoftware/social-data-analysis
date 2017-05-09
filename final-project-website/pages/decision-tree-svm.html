@@ -7,6 +7,11 @@
     </p>
 
     <p>
+        In order to end up with the best prediction model, we are applying two different techniques for binary classification: Decision trees in the form of Random Forest Classification and Support Vector Machines. It is here our ambition to see which of the
+        models does the best job of predicting whether an accident causes an injury or not. A warning: This page is quite technical.
+    </p>
+
+    <p>
         We made three datasets with different compositions in order to strengthen our testing and validation by trying to simulate out-of-sample validation.<br /> The first dataset is the "original" dataset of ~700,000 rows. This dataset is purged of
         rows with missing zip codes. We sampled from this dataset when training. <br /> The second dataset has a 50/50 ratio between accidents with injuries and accidents without injuries.<br /> In order to make this dataset, we sampled all the rows with
         1 or more injured and combined these row with an equal amount of randomly sampled datapoints from the original dataset. <br /> The third dataset contains only the rows from the original dataset with 1 or more injured.
@@ -88,7 +93,17 @@
 
 <div class="row">
 
-    <h2>Decision Trees</h2> Random forest bla bla bla
+    <h2>Decision Trees</h2>
+
+    <p>
+        Decision trees are a non-parametric supervised learning method used for classification and regression. The idea behind decision trees is to create a model that predicts the value of a target variable by learning simple decision rules inferred from the
+        data features (Grus 2015:201f). Practically this means asking questions to data: Which borough did it happen in? Which zipcode? Which time of the day? We use our knowledge of already existing trends in the data to predict the outcome of the unseen
+        data.
+    </p>
+    <p>
+        In the table below, we see the results of our decision trees (with the use of random forest classification). The decision tree model is very good at fitting to the training data, but it has a hard time generalizing this. This may be a result of overfitting
+        even though we are using random forest. We find a decent test accuracy on the full dataset, but as soon as we train on the balanced 50/50 dataset or the dataset with only injuries, the models performs quite poorly.
+    </p>
 
     <div>
         <h3>Results from the random forest classifier</h3>
@@ -384,7 +399,7 @@
     <h2>Conclusion</h2>
 
     <p>
-        As seen in the tables above we are not able to firmly predict whether or not an injury will occur using SVM classification.<br /> We observe around 50% accuracy on the 50/50 dataset for all three settings, which suggests that the model is no better
-        than randomly guessing.
+        As seen in the tables above, we are not able to firmly predict whether or not an injury will occur using either decision tree or SVM classification. We do however find that the SVM classification did the best job of predicting the injuries. However, we
+        do only observe around 50% accuracy on the 50/50 dataset for all three settings, which suggests that the model is no better than randomly guessing.
     </p>
 </div>

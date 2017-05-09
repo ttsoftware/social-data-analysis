@@ -44,6 +44,7 @@ g {
 .legend {
     width: 25%;
     max-width: 25%;
+    padding-top: 20px;
     float: right;
 }
 

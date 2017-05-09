@@ -33421,7 +33421,7 @@ function initDescriptive() {
 
         // generate a list of categories
         var categories = new Array(5).fill(0).map(function (e, i) {
-            return yearData[2013][i].category;
+            return yearData[2016][i].category;
         });
 
         // add the legend
@@ -34021,10 +34021,13 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
 
             // avoid scoping issues
             var instance = this;
+            var instanceDataPoints = $.extend(true, [], this.dataPoints);
+
+            console.log(instanceDataPoints);
 
             if (!colors) {
                 // generate a color for each dataPoint
-                var _colors = new Array(this.dataPoints.length).fill(0).map(function (e) {
+                var _colors = new Array(instanceDataPoints.length).fill(0).map(function (e) {
                     return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
                 });
             }
@@ -34032,12 +34035,12 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
             var formatSignif = d3.format(".0f");
 
             // scale signif values
-            var minTotal = d3.min(this.dataPoints, function (dataPoint) {
+            var minTotal = d3.min(instanceDataPoints, function (dataPoint) {
                 return dataPoint.ySignificance;
             });
 
-            var normalizedSignif = new Array(this.dataPoints.length).fill(0);
-            this.dataPoints.forEach(function (dataPoint, i) {
+            var normalizedSignif = new Array(instanceDataPoints.length).fill(0);
+            instanceDataPoints.forEach(function (dataPoint, i) {
                 normalizedSignif[i] = dataPoint.ySignificance / minTotal * 8;
             });
 
@@ -34045,10 +34048,10 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
             var tooltip = d3.select("body").append("div").attr("class", "text").style("opacity", 0);
 
             // Append the plot to the svg
-            var dots = svg.selectAll("g.dot").data(this.dataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
+            var dots = svg.selectAll("g.dot").data(instanceDataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
                 tooltip.style("opacity", 1);
                 tooltip.html(categories[i] + '<br>' + '<span style="color: #161515">Accidents</span>: ' + formatSignif(dataPoint.y, 4) + '<br>' + '<span style="color: #161515">Injuries</span>: ' + formatSignif(dataPoint.x, 4) + '<br>' + '<span style="color: #161515">Ratio</span>: ' + formatSignif(dataPoint.ySignificance * 100, 4) + '%').style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", '#C02F1D');
-            }).on("mouseout", function (dataPoint) {
+            }).on("mouseout", function (dataPoint, i) {
                 tooltip.style("opacity", 0);
             });
 
@@ -34057,9 +34060,9 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
                 return colors[i];
             }).attr("r", function (dataPoint, i) {
                 return normalizedSignif[i];
-            }).transition().ease(d3.easeElastic).duration(2000).attr("cx", function (dataPoint) {
+            }).transition().ease(d3.easeElastic).duration(2000).attr("cx", function (dataPoint, i) {
                 return instance.xAxis(dataPoint.x);
-            }).attr("cy", function (dataPoint) {
+            }).attr("cy", function (dataPoint, i) {
                 return instance.yAxis(dataPoint.y);
             });
 

@@ -28,10 +28,13 @@ export class ScatterPlot extends Plot {
 
         // avoid scoping issues
         let instance = this;
+        let instanceDataPoints = $.extend(true, [], this.dataPoints);
+
+        console.log(instanceDataPoints);
 
         if (!colors) {
             // generate a color for each dataPoint
-            let colors = new Array(this.dataPoints.length)
+            let colors = new Array(instanceDataPoints.length)
                 .fill(0)
                 .map(function(e) {
                     return "hsl(" + Math.random() * 360 + ", 100%, 50%)";
@@ -41,12 +44,12 @@ export class ScatterPlot extends Plot {
         let formatSignif = d3.format(".0f");
 
         // scale signif values
-        let minTotal = d3.min(this.dataPoints, function(dataPoint) {
+        let minTotal = d3.min(instanceDataPoints, function(dataPoint) {
             return dataPoint.ySignificance;
         });
 
-        let normalizedSignif = new Array(this.dataPoints.length).fill(0);
-        this.dataPoints.forEach(function(dataPoint, i) {
+        let normalizedSignif = new Array(instanceDataPoints.length).fill(0);
+        instanceDataPoints.forEach(function(dataPoint, i) {
             normalizedSignif[i] = (dataPoint.ySignificance / minTotal) * 8;
         });
 
@@ -58,7 +61,7 @@ export class ScatterPlot extends Plot {
 
         // Append the plot to the svg
         let dots = svg.selectAll("g.dot")
-            .data(this.dataPoints)
+            .data(instanceDataPoints)
             .enter()
             .append("g")
             .on("mousemove", function(dataPoint, i) {
@@ -73,7 +76,7 @@ export class ScatterPlot extends Plot {
                     .style("top", (d3.event.pageY - 10) + "px")
                     .style("background-color", '#C02F1D');
             })
-            .on("mouseout", function(dataPoint) {
+            .on("mouseout", function(dataPoint, i) {
                 tooltip.style("opacity", 0);
             });
 
@@ -88,10 +91,10 @@ export class ScatterPlot extends Plot {
             .transition()
             .ease(d3.easeElastic)
             .duration(2000)
-            .attr("cx", function(dataPoint) {
+            .attr("cx", function(dataPoint, i) {
                 return instance.xAxis(dataPoint.x);
             })
-            .attr("cy", function(dataPoint) {
+            .attr("cy", function(dataPoint, i) {
                 return instance.yAxis(dataPoint.y);
             });
 

@@ -76,7 +76,7 @@ export function initDescriptive() {
         let categories = new Array(5)
             .fill(0)
             .map(function(e, i) {
-                return yearData[2013][i].category;
+                return yearData[2016][i].category;
             });
 
         // add the legend

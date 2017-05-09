@@ -1,4 +1,4 @@
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
     .navbar-header {
         float: none;
     }
@@ -63,7 +63,8 @@ ul {
 
 .row ul li {
     list-style: lower-greek;
-    margin-bottom: 10px
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .banner {
@@ -99,9 +100,10 @@ ul {
 .nav-pills>li {
     background-color: #161515;
     border-radius: 0;
-    min-width: 130px;
     text-align: center;
     cursor: pointer;
+    padding: 0 !important;
+    min-width: 100px;
 }
 
 .nav-pills>li>a {
@@ -155,4 +157,8 @@ ul {
 
 .mt-50 {
     margin-top: 50px;
+}
+
+.mh400 {
+    max-height: 400px;
 }

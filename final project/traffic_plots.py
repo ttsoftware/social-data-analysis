@@ -38,7 +38,7 @@ print correlation['TAVG']['ACCIDENT COUNT']
 print correlation['TAVG']['NUMBER OF PERSONS INJURED']
 print correlation['TAVG']['NUMBER OF PERSONS KILLED']
 
-fig = plt.figure(1)
+fig = plt.figure(None)
 # We define a fake subplot that is in fact only the plot.
 plot = fig.add_subplot(111)
 
