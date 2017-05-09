@@ -33,8 +33,12 @@ function plotJSON(dataFile, geoFile, colors) {
     let width = 950;
     let height = 800;
 
-    //Create SVG element
-    let svg = d3.select(".svgContainerGeo")
+    //Create SVG elements
+    let svgAccidents = d3.select(".svgContainerGeoAccidents")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+    let svgRatio = d3.select(".svgContainerGeoRatio")
         .append("svg")
         .attr("width", width)
         .attr("height", height);
@@ -44,8 +48,23 @@ function plotJSON(dataFile, geoFile, colors) {
         let data = values[0];
         let geodata = values[1];
 
-        let geoPlot = new Geoplot(height, width, geodata, data);
+        let geoPlotAccidents = new Geoplot(height, width, geodata, data);
+        let geoPlotRatio = new Geoplot(height, width, geodata, data);
 
-        geoPlot.plot(svg, colors);
+        geoPlotAccidents.plot(
+            svgAccidents,
+            (d) => {
+                return d['ACCIDENTS'] / 40;
+            },
+            colors
+        );
+
+        geoPlotRatio.plot(
+            svgRatio,
+            (d) => {
+                return d['RATIO'] * 40;
+            },
+            colors
+        );
     });
 }

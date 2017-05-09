@@ -20,10 +20,11 @@ export class Geoplot extends Plot {
     /**
      * Add the geoplot
      * @param svg - the DOM svg element
+     * @param scalingFactor - the function with which the dots should be scaled
      * @param colors - optional color input
      * @param opacity - optional opacity input
      */
-    plot(svg, colors, opacities) {
+    plot(svg, scalingFactor, colors, opacities) {
 
         // avoid scoping issues
         let instance = this;
@@ -94,9 +95,7 @@ export class Geoplot extends Plot {
             .attr("cy", function(d) {
                 return projection([d.LON, d.LAT])[1];
             })
-            .attr("r", function(d) {
-                return d.ACCIDENTS / 70;
-            })
+            .attr("r", scalingFactor)
             .style("fill", function(d, i) {
                 return colors[d.COLOR];
             })

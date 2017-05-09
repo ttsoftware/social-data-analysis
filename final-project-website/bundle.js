@@ -33526,17 +33526,25 @@ function plotJSON(dataFile, geoFile, colors) {
     var width = 950;
     var height = 800;
 
-    //Create SVG element
-    var svg = d3.select(".svgContainerGeo").append("svg").attr("width", width).attr("height", height);
+    //Create SVG elements
+    var svgAccidents = d3.select(".svgContainerGeoAccidents").append("svg").attr("width", width).attr("height", height);
+    var svgRatio = d3.select(".svgContainerGeoRatio").append("svg").attr("width", width).attr("height", height);
 
     Promise.all(promises).then(function (values) {
 
         var data = values[0];
         var geodata = values[1];
 
-        var geoPlot = new _Geoplot.Geoplot(height, width, geodata, data);
+        var geoPlotAccidents = new _Geoplot.Geoplot(height, width, geodata, data);
+        var geoPlotRatio = new _Geoplot.Geoplot(height, width, geodata, data);
 
-        geoPlot.plot(svg, colors);
+        geoPlotAccidents.plot(svgAccidents, function (d) {
+            return d['ACCIDENTS'] / 40;
+        }, colors);
+
+        geoPlotRatio.plot(svgRatio, function (d) {
+            return d['RATIO'] * 40;
+        }, colors);
     });
 }
 
@@ -33774,6 +33782,7 @@ var Geoplot = exports.Geoplot = function (_Plot) {
     /**
      * Add the geoplot
      * @param svg - the DOM svg element
+     * @param scalingFactor - the function with which the dots should be scaled
      * @param colors - optional color input
      * @param opacity - optional opacity input
      */
@@ -33781,7 +33790,7 @@ var Geoplot = exports.Geoplot = function (_Plot) {
 
     _createClass(Geoplot, [{
         key: 'plot',
-        value: function plot(svg, colors, opacities) {
+        value: function plot(svg, scalingFactor, colors, opacities) {
 
             // avoid scoping issues
             var instance = this;
@@ -33823,9 +33832,7 @@ var Geoplot = exports.Geoplot = function (_Plot) {
                 return projection([d.LON, d.LAT])[0];
             }).attr("cy", function (d) {
                 return projection([d.LON, d.LAT])[1];
-            }).attr("r", function (d) {
-                return d.ACCIDENTS / 70;
-            }).style("fill", function (d, i) {
+            }).attr("r", scalingFactor).style("fill", function (d, i) {
                 return colors[d.COLOR];
             }).style("opacity", function (d) {
                 return opacities[d.COLOR];
