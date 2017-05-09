@@ -65,13 +65,13 @@ export class ScatterPlot extends Plot {
                 tooltip.style("opacity", 1);
                 tooltip.html(
                         categories[i] + '<br>' +
-                        '<span style="color: black">Accidents</span>: ' + formatSignif(dataPoint.y, 4) + '<br>' +
-                        '<span style="color: black">Injuries</span>: ' + formatSignif(dataPoint.x, 4) + '<br>' +
-                        '<span style="color: black">Ratio</span>: ' + formatSignif(dataPoint.ySignificance * 100, 4) + '%'
+                        '<span style="color: #161515">Accidents</span>: ' + formatSignif(dataPoint.y, 4) + '<br>' +
+                        '<span style="color: #161515">Injuries</span>: ' + formatSignif(dataPoint.x, 4) + '<br>' +
+                        '<span style="color: #161515">Ratio</span>: ' + formatSignif(dataPoint.ySignificance * 100, 4) + '%'
                     )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 10) + "px")
-                    .style("background-color", colors[i]);
+                    .style("background-color", '#C02F1D');
             })
             .on("mouseout", function(dataPoint) {
                 tooltip.style("opacity", 0);

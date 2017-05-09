@@ -55,12 +55,12 @@ export class BarPlot extends Plot {
             .on("mousemove", function(dataPoint, i) {
                 tooltip.style("opacity", 1);
                 tooltip.html(
-                        '<span style="color: black">Accidents</span>: ' + dataPoint.Number + '<br>' +
-                        '<span style="color: black">Effect</span>: ' + dataPoint.Effect
+                        '<span style="color: #161515">Accidents</span>: ' + dataPoint.Number + '<br>' +
+                        '<span style="color: #161515">Effect</span>: ' + dataPoint.Effect
                     )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 10) + "px")
-                    .style("background-color", colors[i]);
+                    .style("background-color", '#C02F1D');
             })
             .on("mouseout", function(dataPoint) {
                 tooltip.style("opacity", 0);
@@ -69,7 +69,7 @@ export class BarPlot extends Plot {
         bars
             .append("rect")
             .attr("fill", function(d) {
-                return "rgb(0, 0, " + (Math.round(d.Importance / 150)) + ")";
+                return "rgb(" + (Math.round((1 / d.Importance)* 2000000)) + ", 0, 0)";
             })
             .attr("x", function(d, i) {
                 return i * (instance.width / instance.dataPoints.length) //Bar width of 20 plus 1 for padding

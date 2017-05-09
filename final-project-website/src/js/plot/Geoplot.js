@@ -75,12 +75,12 @@ export class Geoplot extends Plot {
                 tooltip.style("opacity", 1);
                 tooltip.html(
                         dataPoint.INTERSECTION + '<br>' +
-                        '<span style="color: black">Accidents</span>: ' + dataPoint.ACCIDENTS + '<br>' +
-                        '<span style="color: black">Injuries</span>: ' + dataPoint.INJURIES + '<br>'
+                        '<span style="color: #161515">Accidents</span>: ' + dataPoint.ACCIDENTS + '<br>' +
+                        '<span style="color: #161515">Injuries</span>: ' + dataPoint.INJURIES + '<br>'
                     )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 10) + "px")
-                    .style("background-color", colors[dataPoint.COLOR]);
+                    .style("background-color", '#C02F1D');
             })
             .on("mouseout", function(dataPoint) {
                 tooltip.style("opacity", 0);

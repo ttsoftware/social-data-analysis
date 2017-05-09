@@ -33381,7 +33381,17 @@ var loadCSV = require('../lib/loadCSV.js');
 
 function initDescriptive() {
 
-    var colors = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
+    // let colors = [
+    //     '#C3C3C3',
+    //     '#918c8c',
+    //     '#4e5050',
+    //     '#303032',
+    //     '#0d0c0c',
+    // ];
+
+    var colors = ["#91000d", "#c70e69", "#b16500", "#9f742d", "#fd003b", "#ff0058", "#d77a5f", "#bca737", "#ff9b4c", "#fdba35"];
+
+    // let colors = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395"];
 
     var margin = {
         top: 20,
@@ -33683,13 +33693,13 @@ var BarPlot = exports.BarPlot = function (_Plot) {
             // Append the plot to the svg
             var bars = svg.selectAll("g.bar").data(this.dataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
                 tooltip.style("opacity", 1);
-                tooltip.html('<span style="color: black">Accidents</span>: ' + dataPoint.Number + '<br>' + '<span style="color: black">Effect</span>: ' + dataPoint.Effect).style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[i]);
+                tooltip.html('<span style="color: #161515">Accidents</span>: ' + dataPoint.Number + '<br>' + '<span style="color: #161515">Effect</span>: ' + dataPoint.Effect).style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", '#C02F1D');
             }).on("mouseout", function (dataPoint) {
                 tooltip.style("opacity", 0);
             });
 
             bars.append("rect").attr("fill", function (d) {
-                return "rgb(0, 0, " + Math.round(d.Importance / 150) + ")";
+                return "rgb(" + Math.round(1 / d.Importance * 2000000) + ", 0, 0)";
             }).attr("x", function (d, i) {
                 return i * (instance.width / instance.dataPoints.length); //Bar width of 20 plus 1 for padding
             }).attr("y", function (d) {
@@ -33803,7 +33813,7 @@ var Geoplot = exports.Geoplot = function (_Plot) {
             // mouseover tooltips
             var dots = svg.selectAll("g.dot").data(this.dataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
                 tooltip.style("opacity", 1);
-                tooltip.html(dataPoint.INTERSECTION + '<br>' + '<span style="color: black">Accidents</span>: ' + dataPoint.ACCIDENTS + '<br>' + '<span style="color: black">Injuries</span>: ' + dataPoint.INJURIES + '<br>').style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[dataPoint.COLOR]);
+                tooltip.html(dataPoint.INTERSECTION + '<br>' + '<span style="color: #161515">Accidents</span>: ' + dataPoint.ACCIDENTS + '<br>' + '<span style="color: #161515">Injuries</span>: ' + dataPoint.INJURIES + '<br>').style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", '#C02F1D');
             }).on("mouseout", function (dataPoint) {
                 tooltip.style("opacity", 0);
             });
@@ -34012,7 +34022,7 @@ var ScatterPlot = exports.ScatterPlot = function (_Plot) {
             // Append the plot to the svg
             var dots = svg.selectAll("g.dot").data(this.dataPoints).enter().append("g").on("mousemove", function (dataPoint, i) {
                 tooltip.style("opacity", 1);
-                tooltip.html(categories[i] + '<br>' + '<span style="color: black">Accidents</span>: ' + formatSignif(dataPoint.y, 4) + '<br>' + '<span style="color: black">Injuries</span>: ' + formatSignif(dataPoint.x, 4) + '<br>' + '<span style="color: black">Ratio</span>: ' + formatSignif(dataPoint.ySignificance * 100, 4) + '%').style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", colors[i]);
+                tooltip.html(categories[i] + '<br>' + '<span style="color: #161515">Accidents</span>: ' + formatSignif(dataPoint.y, 4) + '<br>' + '<span style="color: #161515">Injuries</span>: ' + formatSignif(dataPoint.x, 4) + '<br>' + '<span style="color: #161515">Ratio</span>: ' + formatSignif(dataPoint.ySignificance * 100, 4) + '%').style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 10 + "px").style("background-color", '#C02F1D');
             }).on("mouseout", function (dataPoint) {
                 tooltip.style("opacity", 0);
             });
